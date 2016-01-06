@@ -12,7 +12,9 @@
     {"name":"ADAPTATION","group":2},
     {"name":"AC","group":2},
     {"name":"LDCEG","group":2},
-    {"name":"Article4-p12","group":0}
+    {"name":"Article4-p12","group":0},
+    {"name":"Article 4","group":0},
+    {"name":"Article4-p14","group":0}
   ],
   "links":[
     {"source":1,"target":0,"value":4},
@@ -36,6 +38,9 @@
     {"source":10,"target":7,"value":4},
     {"source":11,"target":9,"value":4},
     {"source":11,"target":7,"value":4},
-    {"source":12,"target":7,"value":4}
+    {"source":12,"target":7,"value":4},
+    {"source":12,"target":13,"value":4},
+    {"source":14,"target":13,"value":4},
+    {"source":2,"target":14,"value":4}
   ]
 }

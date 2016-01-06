@@ -19,6 +19,10 @@
   cursor: pointer;
 }
 
+.node circle:hover {
+  stroke: steelblue;
+}
+
 #infotext {
   font-family:Helvetica, sans-serif;
   position: relative;
@@ -47,7 +51,7 @@
 
 <script>
 
-var width = 1100,
+var width = 1300,
     height = 600;
 
 var color = d3.scale.category20();
@@ -58,7 +62,7 @@ var nameDict = {};
 nameDict["AdHoc Work Grp"] = "Ad Hoc Working Group";
 nameDict["SBI"] = "Subsidiary Body for Implementation";
 nameDict["FII"] = "Forum on the Impact of the Implementation";
-nameDict["COP-Paris1"] = "COP serving as the meeting of the Parties to the Paris Agreement at its first session";
+nameDict["COP-Paris1"] = "COP, Paris Agreement meeting, first session";
 nameDict["Agreement"] = "Paris Agreement";
 nameDict["SBSTA"] = "Subsidiary Body for Scientific and Technological Advice";
 nameDict["AC"] = "Adaptation Committee";
@@ -82,7 +86,7 @@ d3.json("Agreement-link.json", function(link_info) {
 
 //Replace d3 layout force with cola for better node layout
 var force = cola.d3adaptor()
-    .linkDistance(130)
+    .linkDistance(100)
     .size([width, height]);    
 
 d3.json("mitigation.json", function(error, json) {
@@ -113,6 +117,7 @@ d3.json("mitigation.json", function(error, json) {
       .attr("r", function (d) {
         //console.log("d: ", d)
         if (d.name === "MITIGATION" || d.name === "ADAPTATION" || d.name === "Agreement") return 15;
+        else if (d.name === "Article 4") return 10;
         else return 5;
       })
       .style("fill", function(d) { 
@@ -147,15 +152,14 @@ d3.json("mitigation.json", function(error, json) {
 
 //Display full name of text node in larger font
 function textMouseover(d) {
-  if (nameDict[d.name]) {//only if name is in dictionary
-    d3.select(this).text(nameDict[d.name]).style("font-size", "15px");
-  }
+    d3.select(this).text(function (d) {
+      return nameDict[d.name] || d.name; 
+    })
+    .style("font-size", "15px");
 }
 //Return text to original
 function textMouseout(d) {
-  if (nameDict[d.name]) {//only if name is in dictionary
     d3.select(this).text(d.name).style("font-size", "10px");
-  }
 }
 
 //Display document text when link is clicked
