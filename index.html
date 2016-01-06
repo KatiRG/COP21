@@ -1,0 +1,190 @@
+<!--http://bl.ocks.org/mbostock/950642-->
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.link {
+  cursor: pointer;
+  stroke: #ccc;
+}
+
+.node text {
+  /*pointer-events: none;*/
+  cursor: pointer;
+  font: 10px sans-serif;
+}
+
+.node circle {
+  cursor: pointer;
+}
+
+#infotext {
+  font-family:Helvetica, sans-serif;
+  position: relative;
+  width: 500px;
+  top: 655px;
+  left: 100px;
+}
+
+.precis {
+  font-family:Helvetica, sans-serif;
+  position: relative;
+  height: 20px;
+  width: 700px;
+  top: 660px;
+  left: 100px;
+  
+}
+
+</style>
+<body>
+<script src="d3.v3.min.js"></script>
+<script src="cola.v3.min.js"></script> <!--http://marvl.infotech.monash.edu/webcola/-->
+
+<div id="infotext">Click on a link to see the corresponding citation</div> 
+<p class="precis"></p>
+
+<script>
+
+var width = 1100,
+    height = 600;
+
+var color = d3.scale.category20();
+var my_color = ["#ff7f0e", "#1f77b4", "#00c8c8"];
+
+
+var nameDict = {};
+nameDict["AdHoc Work Grp"] = "Ad Hoc Working Group";
+nameDict["SBI"] = "Subsidiary Body for Implementation";
+nameDict["FII"] = "Forum on the Impact of the Implementation";
+nameDict["COP-Paris1"] = "COP serving as the meeting of the Parties to the Paris Agreement at its first session";
+nameDict["Agreement"] = "Paris Agreement";
+nameDict["SBSTA"] = "Subsidiary Body for Scientific and Technological Advice";
+nameDict["AC"] = "Adaptation Committee";
+nameDict["LDCEG"] = "Least Developed Countries Expert Group";
+
+
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+d3.json("Agreement-link.json", function(link_info) {
+  bibinfo = link_info;    
+
+// var force = d3.layout.force()
+//     .gravity(.03)
+//     .distance(200)
+//     //.linkDistance(130)
+//     .charge(-100)
+//     .size([width, height]);
+
+//Replace d3 layout force with cola for better node layout
+var force = cola.d3adaptor()
+    .linkDistance(130)
+    .size([width, height]);    
+
+d3.json("mitigation.json", function(error, json) {
+  if (error) throw error;
+
+  force
+      .nodes(json.nodes)
+      .links(json.links)
+      .start();
+
+  var link = svg.selectAll(".link")
+      .data(json.links)
+    .enter().append("line")
+      .attr("class", "link")
+      .attr("id", function (d, i) {
+        return "link-" + i;
+      })
+      .style("stroke-width", function(d) { return d.value; })
+      .on("click", linkMouseClick);
+
+  var node = svg.selectAll(".node")
+      .data(json.nodes)
+    .enter().append("g")
+      .attr("class", "node")
+      .call(force.drag);
+
+  node.append("circle")
+      .attr("r", function (d) {
+        //console.log("d: ", d)
+        if (d.name === "MITIGATION" || d.name === "ADAPTATION" || d.name === "Agreement") return 15;
+        else return 5;
+      })
+      .style("fill", function(d) { 
+        return my_color[d.group];
+        //return color(d.group);
+      });
+
+  node.append("text")
+      .attr("dx", 12)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name })
+      .on("mouseover", textMouseover)
+      .on("mouseout", textMouseout);
+
+  //Display full node name upon circle mouseover    
+  // node.append("title")
+  //     .text(function(d) {
+  //       return nameDict[d.name]; 
+  //     });
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  });
+});
+
+}); //end Agreement-link.json
+
+//Display full name of text node in larger font
+function textMouseover(d) {
+  if (nameDict[d.name]) {//only if name is in dictionary
+    d3.select(this).text(nameDict[d.name]).style("font-size", "15px");
+  }
+}
+//Return text to original
+function textMouseout(d) {
+  if (nameDict[d.name]) {//only if name is in dictionary
+    d3.select(this).text(d.name).style("font-size", "10px");
+  }
+}
+
+//Display document text when link is clicked
+function linkMouseClick(d) {
+  console.log("link!!! source: ", d.source)
+  console.log("link!!! target: ", d.target)
+  console.log("this: ", this)
+  console.log("this.id: ", this.id)
+
+  //Find previously-selected links
+  //d3.selectAll("line").classed("selected", true)
+
+  //toggle link state
+  if (d3.select(this).attr("class") === "selected") {
+    d3.select(this).attr("class", "unselected");
+    d3.select(this).style("stroke", "#ccc");
+  } else {
+    d3.select(this).attr("class", "selected");
+    d3.select(this).style("stroke", "red");
+  };
+
+  console.log("bibinfo: ", bibinfo[this.id])
+  var s = this.id; 
+  var linkref = "Section " + bibinfo[s]['section']+", p. "+bibinfo[s]['para'] +": "+ bibinfo[s]['verb'] + bibinfo[s]['text'];
+  console.log(linkref)
+  d3.select(".precis").text(linkref);
+  
+
+ 
+}
+
+</script>
