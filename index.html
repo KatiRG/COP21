@@ -4,6 +4,44 @@
 <meta charset="utf-8">
 <style>
 
+body {
+  font-family: Helvetica, sans-serif;
+  color: #585858;
+}
+
+#title {
+  font-size: 26px;
+  position: relative;
+  width: 700px;
+  top: 5px;
+  left: 100px;
+}
+
+#infotext {
+  position: relative;
+  width: 700px;
+  top: 50px;
+  left: 100px;
+}
+
+.precis_ref {
+  font-family: serif;
+  position: relative;
+  height: 20px;
+  width: 400px;
+  top: 100px;
+  left: 100px;
+}
+
+.precis {
+  font-family: serif;
+  position: relative;
+  height: 20px;
+  width: 400px;
+  top: 120px;
+  left: 100px;
+}
+
 .link {
   cursor: pointer;
   stroke: #ccc;
@@ -13,6 +51,7 @@
   /*pointer-events: none;*/
   cursor: pointer;
   font: 10px sans-serif;
+  fill: #303030;
 }
 
 /*.node circle {
@@ -23,31 +62,22 @@
   stroke: steelblue;
 }
 
-#infotext {
-  font-family:Helvetica, sans-serif;
-  position: relative;
-  width: 400px;
-  top: 655px;
-  left: 100px;
-}
-
-.precis {
-  font-family:Helvetica, sans-serif;
-  position: relative;
-  height: 20px;
-  width: 400px;
-  top: 660px;
-  left: 100px;
-  
-}
 
 </style>
 <body>
 <script src="d3.v3.min.js"></script>
 <script src="cola.v3.min.js"></script> <!--http://marvl.infotech.monash.edu/webcola/-->
+<script src="jquery-1.10.2.min.js"></script>
 
-<div id="infotext">Click on a link to see the corresponding citation</div> 
-<p class="precis"></p>
+<div id="title">COP21 Paris Agreement and supporting Decisions</div>
+
+<div id="infotext">
+  Click on a link to highlight it and display the corresponding document text.</br>
+  To deselect a link, click on it again.
+</div> 
+
+<div class="precis_ref"></div>
+<div class="precis"></div>
 
 <script>
 
@@ -72,15 +102,16 @@ nameDict["AC"] = "Adaptation Committee";
 nameDict["LDCEG"] = "Least Developed Countries Expert Group";
 nameDict["SCF"] = "Standing Committee on Finance";
 
-
-
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
+$("svg").css({top: 20, left: 100, position:'absolute'});
+
 d3.json("Agreement-link.json", function(link_info) {
   bibinfo = link_info;    
 
+//d3 layout force. Nodes all squished together
 // var force = d3.layout.force()
 //     .gravity(.03)
 //     .distance(200)
@@ -121,7 +152,6 @@ d3.json("mitigation.json", function(error, json) {
 
   node.append("circle")
       .attr("r", function (d) {
-        //console.log("d: ", d)
         if (d.name === "MITIGATION" || d.name === "ADAPTATION" || d.name === "Agreement") return 15;
         else if (d.name === "Article 4" || d.name === "Article 7" || d.name === "Article 2") return 10;
         else return 5;
@@ -195,29 +225,24 @@ function linkMouseClick(d) {
 
     console.log("bibinfo: ", bibinfo[this.id])
     var s = this.id; 
-    var linkref = "Section " + bibinfo[s]['section']+", p. "+bibinfo[s]['para'] +": "+ bibinfo[s]['verb'] + bibinfo[s]['text'];
+    var linkref = "Section " + bibinfo[s]['section']+", para. "+bibinfo[s]['para'] +": ";
+    var linkref_text = bibinfo[s]['text'];
     console.log(linkref)
-    d3.select(".precis").text(linkref);
+    d3.select(".precis_ref").text(linkref);
+    d3.select(".precis").text(linkref_text);
 
   } else { //only previously selected link is clickable (ie to turn it off)
     if (this.id === active_link.split("#").pop()) {//turn off currently active link = previously selected link
       console.log("same link: ", this.id)
       d3.select(this).attr("class", "unselected");
       d3.select(this).style("stroke", "#ccc");
+
+      //reset
       active_link = "0";
+      d3.select(".precis_ref").remove();
+      d3.select(".precis").remove();
     }
   }
-  
-  
-  //ORIG
-  //toggle link state
-  // if (d3.select(this).attr("class") === "selected") {
-  //   d3.select(this).attr("class", "unselected");
-  //   d3.select(this).style("stroke", "#ccc");
-  // } else {
-  //   d3.select(this).attr("class", "selected");
-  //   d3.select(this).style("stroke", "red");
-  // };
 
 }
 
