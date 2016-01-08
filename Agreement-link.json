@@ -12,7 +12,15 @@
 	"topic" : "Mitigation",
 	"para" : 29,
 	"verb" : "Also requests ",
-	"text" : "The Subsidiary Body for Impmlementation is requested to develop  modalities and procedures for the operation and use of the public registry (see Article 4, para 12) for consideration and adoption at the meeting of Parties to the Paris Agreement, first session."
+	"text" : "The Subsidiary Body for Implementation is requested to develop  modalities and procedures for the operation and use of the public registry (see Article 4, para 12) for consideration and adoption at the meeting of Parties to the Paris Agreement, first session."
+	},
+
+	"link-13" : {
+	"section" : "III",
+	"topic" : "Mitigation",
+	"para" : 34,
+	"verb" : "Further requests ",
+	"text" : "The SBI and SBSTA shall recommend, for consideration and adoption at the meeting of the Parties to the Paris agreement at its first session, the modalities, work programme and functions of the Forum on the Impact of the Implementation of response measures to address the effects of the implementation of response measures under the Agreement by enhancing cooperation amongst Parties on understanding the impacts of mitigation actions under the Agreement and the exchange of information, experiences, and best practices amongst Parties to raise their resilience to these impacts."
 	},
 
 	"link-15" : {
@@ -21,6 +29,22 @@
 	"para" : 34,
 	"verb" : "Further requests ",
 	"text" : "The SBI and SBSTA shall recommend, for consideration and adoption at the meeting of the Parties to the Paris agreement at its first session, the modalities, work programme and functions of the Forum on the Impact of the Implementation of response measures to address the effects of the implementation of response measures under the Agreement by enhancing cooperation amongst Parties on understanding the impacts of mitigation actions under the Agreement and the exchange of information, experiences, and best practices amongst Parties to raise their resilience to these impacts."
+	},
+
+	"link-16" : {
+	"section" : "III",
+	"topic" : "Mitigation",
+	"para" : 34,
+	"verb" : "Further requests ",
+	"text" : "The SBI and SBSTA shall recommend, for consideration and adoption at the meeting of the Parties to the Paris agreement at its first session, the modalities, work programme and functions of the Forum on the Impact of the Implementation of response measures to address the effects of the implementation of response measures under the Agreement by enhancing cooperation amongst Parties on understanding the impacts of mitigation actions under the Agreement and the exchange of information, experiences, and best practices amongst Parties to raise their resilience to these impacts."
+	},
+
+	"link-18" : {
+	"section" : "III",
+	"topic" : "Mitigation",
+	"para" : 29,
+	"verb" : "Also requests ",
+	"text" : "The Subsidiary Body for Implementation is requested to develop  modalities and procedures for the operation and use of the public registry (see Article 4, para 12) for consideration and adoption at the meeting of Parties to the Paris Agreement, first session."
 	}
 
 }

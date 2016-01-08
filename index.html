@@ -73,7 +73,8 @@ body {
 
 <div id="infotext">
   Click on a link to highlight it and display the corresponding document text.</br>
-  To deselect a link, click on it again.
+  To deselect a link, click on it again.</br>
+  Only one link can be selected at a time.
 </div> 
 
 <div class="precis_ref"></div>
@@ -216,7 +217,6 @@ function linkMouseover(d) {
 function linkMouseClick(d) {
   // console.log("link!!! source: ", d.source)
   // console.log("link!!! target: ", d.target)
-  console.log("active_link: ", active_link)
 
   //if no link has been previously selected, activate this link
   if (active_link === "0") {
@@ -224,20 +224,21 @@ function linkMouseClick(d) {
     d3.select(this).style("stroke", "red");
     active_link = "#" + this.id; //save id of activated link
 
-    console.log("bibinfo: ", bibinfo[this.id])
     var s = this.id; 
-    var linkref = "Section " + bibinfo[s]['section']+", para. "+bibinfo[s]['para'] +": ";
-    var linkref_text = bibinfo[s]['text'];
-    console.log("linkref: ", linkref)
+    if (bibinfo[s]) {
+      var linkref = "Section " + bibinfo[s]['section']+", para. "+bibinfo[s]['para'] +": ";
+      var linkref_text = bibinfo[s]['text'];      
+    } else {
+      var linkref = "Section TBA, para. TBA:";
+      var linkref_text = "Text TBA";
+    }
+
     d3.selectAll(".precis_ref").text(linkref);
     d3.selectAll(".precis").text(linkref_text);
 
   } else { //only previously selected link is clickable (ie to turn it off)
-    console.log("active_link in else: ", active_link)
-    console.log("this.id: ", this.id)
 
     if (this.id === active_link.split("#").pop()) {//turn off currently active link = previously selected link
-      console.log("same link: ", this.id)
       d3.select(this).attr("class", "unselected");
       d3.select(this).style("stroke", "#ccc");
 
