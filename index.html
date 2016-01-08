@@ -15,9 +15,9 @@
   font: 10px sans-serif;
 }
 
-.node circle {
+/*.node circle {
   cursor: pointer;
-}
+}*/
 
 .node circle:hover {
   stroke: steelblue;
@@ -51,11 +51,14 @@
 
 <script>
 
-var width = 1300,
+var width = 1500,
     height = 1000;
 
 var color = d3.scale.category20();
 var my_color = ["#ff7f0e", "#1f77b4", "#00c8c8"];
+
+//var precis_text, bibinfo, active_link;
+var active_link = "0";
 
 
 var nameDict = {};
@@ -67,6 +70,7 @@ nameDict["Agreement"] = "Paris Agreement";
 nameDict["SBSTA"] = "Subsidiary Body for Scientific and Technological Advice";
 nameDict["AC"] = "Adaptation Committee";
 nameDict["LDCEG"] = "Least Developed Countries Expert Group";
+nameDict["SCF"] = "Standing Committee on Finance";
 
 
 
@@ -105,7 +109,8 @@ d3.json("mitigation.json", function(error, json) {
         return "link-" + i;
       })
       .style("stroke-width", function(d) { return Math.sqrt(d.value); })
-      .on("click", linkMouseClick);
+      //.style("stroke-width", function(d) { return d.value; })
+      .on("click", linkMouseover);
 
   var node = svg.selectAll(".node")
       .data(json.nodes)
@@ -163,29 +168,68 @@ function textMouseout(d) {
 }
 
 //Display document text when link is clicked
-function linkMouseClick(d) {
-  console.log("link!!! source: ", d.source)
-  console.log("link!!! target: ", d.target)
-  console.log("this: ", this)
-  console.log("this.id: ", this.id)
+function linkMouseover(d) {
+  // console.log("link!!! source: ", d.source)
+  // console.log("link!!! target: ", d.target)
 
-  //Find previously-selected links
-  //d3.selectAll("line").classed("selected", true)
 
-  //toggle link state
-  if (d3.select(this).attr("class") === "selected") {
-    d3.select(this).attr("class", "unselected");
-    d3.select(this).style("stroke", "#ccc");
-  } else {
+  //if a link has already been selected, it must be unselected before another choice is allowed
+  //if no link has been previously selected, activate this link
+  if (active_link === "0") {
     d3.select(this).attr("class", "selected");
     d3.select(this).style("stroke", "red");
-  };
+    active_link = "#" + this.id; //save id of activated link
+    //active_link = true; //save id of activated link
 
-  console.log("bibinfo: ", bibinfo[this.id])
-  var s = this.id; 
-  var linkref = "Section " + bibinfo[s]['section']+", p. "+bibinfo[s]['para'] +": "+ bibinfo[s]['verb'] + bibinfo[s]['text'];
-  console.log(linkref)
-  d3.select(".precis").text(linkref);
+    console.log("bibinfo: ", bibinfo[this.id])
+    var s = this.id; 
+    var linkref = "Section " + bibinfo[s]['section']+", p. "+bibinfo[s]['para'] +": "+ bibinfo[s]['verb'] + bibinfo[s]['text'];
+    console.log(linkref)
+    d3.select(".precis").text(linkref);
+
+  } else {
+    if (this.id === active_link.split("#").pop()) {//turn off currently active link = previously selected link
+      console.log("same link: ", this.id)
+      d3.select(this).attr("class", "unselected");
+      d3.select(this).style("stroke", "#ccc");
+      active_link = "0";
+    }
+  }
+  
+
+  // //if no link is already active, define active_link and activate it
+  // if (!active_link) {
+  //   //define active_link
+  //   active_link = "#" + this.id;
+  //   console.log("active_link: ", active_link)
+  //   console.log("select active_link: ", d3.selectAll(active_link).classed("selected"))
+
+  //   //activate active_link and set to red
+  //   d3.selectAll(active_link).classed("selected", true)
+  //   d3.select(this).style("stroke", "red");
+  // } else if (active_link.split("#").pop() === this.id) { //link was just moused over
+  //   //if on, toggle off
+  //   if (d3.selectAll(active_link).classed("selected") === true) {
+  //     d3.selectAll(active_link).classed("selected", false)
+  //     d3.select(this).style("stroke", "#ccc");
+  //   } else { //if off, toggle on
+  //     d3.selectAll(active_link).classed("selected", true)
+  //     d3.select(this).style("stroke", "red");
+  //   }  
+  // }
+
+  
+  //ORIG
+  //toggle link state
+  // if (d3.select(this).attr("class") === "selected") {
+  //   d3.select(this).attr("class", "unselected");
+  //   d3.select(this).style("stroke", "#ccc");
+  // } else {
+  //   d3.select(this).attr("class", "selected");
+  //   d3.select(this).style("stroke", "red");
+  // };
+
+  
   
 
  
