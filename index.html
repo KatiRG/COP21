@@ -216,6 +216,7 @@ function linkMouseover(d) {
 function linkMouseClick(d) {
   // console.log("link!!! source: ", d.source)
   // console.log("link!!! target: ", d.target)
+  console.log("active_link: ", active_link)
 
   //if no link has been previously selected, activate this link
   if (active_link === "0") {
@@ -227,11 +228,14 @@ function linkMouseClick(d) {
     var s = this.id; 
     var linkref = "Section " + bibinfo[s]['section']+", para. "+bibinfo[s]['para'] +": ";
     var linkref_text = bibinfo[s]['text'];
-    console.log(linkref)
-    d3.select(".precis_ref").text(linkref);
-    d3.select(".precis").text(linkref_text);
+    console.log("linkref: ", linkref)
+    d3.selectAll(".precis_ref").text(linkref);
+    d3.selectAll(".precis").text(linkref_text);
 
   } else { //only previously selected link is clickable (ie to turn it off)
+    console.log("active_link in else: ", active_link)
+    console.log("this.id: ", this.id)
+
     if (this.id === active_link.split("#").pop()) {//turn off currently active link = previously selected link
       console.log("same link: ", this.id)
       d3.select(this).attr("class", "unselected");
@@ -239,8 +243,8 @@ function linkMouseClick(d) {
 
       //reset
       active_link = "0";
-      d3.select(".precis_ref").remove();
-      d3.select(".precis").remove();
+      d3.select(".precis_ref").text(function() {return null; });
+      d3.select(".precis").text(function() {return null; });
     }
   }
 
