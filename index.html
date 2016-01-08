@@ -110,7 +110,8 @@ d3.json("mitigation.json", function(error, json) {
       })
       .style("stroke-width", function(d) { return Math.sqrt(d.value); })
       //.style("stroke-width", function(d) { return d.value; })
-      .on("click", linkMouseover);
+      .on("click", linkMouseClick)
+      .on("mouseover", linkMouseover);
 
   var node = svg.selectAll(".node")
       .data(json.nodes)
@@ -167,19 +168,30 @@ function textMouseout(d) {
     d3.select(this).text(d.name).style("font-size", "10px");
 }
 
-//Display document text when link is clicked
+//When hovering, change cursor to pointer only if no link selected. 
+//If one link selected, only selected link has pointer cursor when hovered over.
 function linkMouseover(d) {
+  if (active_link != "0") {//no link selected
+    if (this.id === active_link.split("#").pop()) d3.select("#" + this.id).style("cursor", "pointer");
+    else d3.select("#" + this.id).style("cursor", "auto"); //deselected links not clickable
+  } else {
+    d3.select("#" + this.id).style("cursor", "pointer"); //all links clickable since no link is active
+  }
+}
+
+//Display document text when link is clicked. Only one link is clickable at a time.
+//If a link has already been selected, it must be unselected before another choice is allowed.
+//Mouse pointers will change accordingly to assist user (see linkMouseover fn).
+//Note: mouseclick nearest path, see https://groups.google.com/forum/#!topic/d3-js/wbYPPgiy6cE
+function linkMouseClick(d) {
   // console.log("link!!! source: ", d.source)
   // console.log("link!!! target: ", d.target)
 
-
-  //if a link has already been selected, it must be unselected before another choice is allowed
   //if no link has been previously selected, activate this link
   if (active_link === "0") {
     d3.select(this).attr("class", "selected");
     d3.select(this).style("stroke", "red");
     active_link = "#" + this.id; //save id of activated link
-    //active_link = true; //save id of activated link
 
     console.log("bibinfo: ", bibinfo[this.id])
     var s = this.id; 
@@ -187,7 +199,7 @@ function linkMouseover(d) {
     console.log(linkref)
     d3.select(".precis").text(linkref);
 
-  } else {
+  } else { //only previously selected link is clickable (ie to turn it off)
     if (this.id === active_link.split("#").pop()) {//turn off currently active link = previously selected link
       console.log("same link: ", this.id)
       d3.select(this).attr("class", "unselected");
@@ -196,28 +208,6 @@ function linkMouseover(d) {
     }
   }
   
-
-  // //if no link is already active, define active_link and activate it
-  // if (!active_link) {
-  //   //define active_link
-  //   active_link = "#" + this.id;
-  //   console.log("active_link: ", active_link)
-  //   console.log("select active_link: ", d3.selectAll(active_link).classed("selected"))
-
-  //   //activate active_link and set to red
-  //   d3.selectAll(active_link).classed("selected", true)
-  //   d3.select(this).style("stroke", "red");
-  // } else if (active_link.split("#").pop() === this.id) { //link was just moused over
-  //   //if on, toggle off
-  //   if (d3.selectAll(active_link).classed("selected") === true) {
-  //     d3.selectAll(active_link).classed("selected", false)
-  //     d3.select(this).style("stroke", "#ccc");
-  //   } else { //if off, toggle on
-  //     d3.selectAll(active_link).classed("selected", true)
-  //     d3.select(this).style("stroke", "red");
-  //   }  
-  // }
-
   
   //ORIG
   //toggle link state
@@ -229,10 +219,6 @@ function linkMouseover(d) {
   //   d3.select(this).style("stroke", "red");
   // };
 
-  
-  
-
- 
 }
 
 </script>
