@@ -229,17 +229,20 @@ d3.json("SourceTargetPairs.json", function(error, json) {
 
   // action for timeline buttons
   d3.select("#pre2020").on("click", fadeOutsideTimeline)
+  
+  d3.select("#all").on("click", function() {
+    clearAll(); //clear any text displays and activated links
+    toggleTimelineButtons(this); //toggle clicked ON and the rest OFF
+
+    //node.each(function(o) { if(isConnected(d, o)) { connected.push(o); } });
+
+  })
    
 
   //Fade network that is outside selected Timeline
   function fadeOutsideTimeline(d) {
-    //clear any text displays and activated links
-    clearAll();
-
-    // toggle clicked button on and the other buttons off
-    d3.selectAll(".nytg-navigation li").attr("class", "");
-    d3.select(this).attr("class", "selected");
-
+    clearAll();  //clear any text displays and activated links
+    toggleTimelineButtons(this) //toggle clicked ON and the rest OFF
     
        
     //find link-id from link_info
@@ -287,6 +290,12 @@ d3.json("SourceTargetPairs.json", function(error, json) {
           d3.select(this).style("stroke", "#ccc");
         }
       });
+  }
+
+  function toggleTimelineButtons(button) {
+    // toggle clicked button on and the other buttons off
+    d3.selectAll(".nytg-navigation li").attr("class", "");
+    d3.select(button).attr("class", "selected");
   }
       
 }); //end SourceTargetPairs.json
