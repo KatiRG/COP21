@@ -126,7 +126,7 @@ var width = 1500,
 var color = d3.scale.category20();
 var my_color = ["#ff7f0e", "#1f77b4", "#00c8c8"];
 
-//var precis_text, bibinfo, active_link;
+//var precis_text, link_info, active_link;
 var active_link = "0";
 
 
@@ -149,8 +149,8 @@ var svg = d3.select("body").append("svg")
 
 $("svg").css({top: 114, left: 100, position:'absolute'});
 
-d3.json("Agreement-link.json", function(link_info) {
-  bibinfo = link_info;    
+d3.json("Agreement-link.json", function(agreementLinks) {
+ link_info = agreementLinks;
 
 //d3 layout force. Nodes all squished together
 // var force = d3.layout.force()
@@ -165,7 +165,7 @@ var force = cola.d3adaptor()
     .linkDistance(110)
     .size([width, height]);    
 
-d3.json("mitigation.json", function(error, json) {
+d3.json("SourceTargetPairs.json", function(error, json) {
   if (error) throw error;
 
   force
@@ -189,6 +189,9 @@ d3.json("mitigation.json", function(error, json) {
       .data(json.nodes)
     .enter().append("g")
       .attr("class", "node")
+      .attr("id", function (d, i) {
+        return "node-" + i;
+      })
       .call(force.drag);
 
   node.append("circle")
@@ -224,19 +227,83 @@ d3.json("mitigation.json", function(error, json) {
     node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
   });
 
-  // action for 'Sort all' button
+  // action for timeline buttons
   d3.select("#pre2020")
     .on("click", function() {
-      console.log("clicked")
+      console.log("this: ", this)
+      console.log("link_info: ", link_info)
+      console.log("link_info[link-40].timeline: ", link_info["link-40"].timeline)
 
+      // toggle clicked button on and the other buttons off
       d3.selectAll(".nytg-navigation li").attr("class", "");
       d3.select(this).attr("class", "selected");
+
+      d3.selectAll("g.node")
+        .filter(function (d) {
+          console.log("node d: ", d)
+        });
      
+      d3.selectAll(".link")
+        .filter(function (d) {
+          console.log("link d: ", d)
+        });
+     
+     //find link-id from link_info
+      d3.selectAll(".link#link-40")
+        .filter(function (d) {
+         
+          console.log("link-40 d: ", d)
+          console.log("link-40 d.source.index: ", d.source.index)
+          console.log("link-40 d.target.index: ", d.target.index)
+
+          d3.select(this).style("stroke", "black")
+          for (i = 0; i < node.size(); i++) {
+            if (! ((i == d.source.index) || (i == d.target.index))) {
+              d3.select("g#node-" + i).select("circle").style("fill", "#C0C0C0");
+              d3.select("g#node-" + i).select("circle").attr("class", "differentTime");
+              //d3.select("#link-" + i).style("stroke", "red")
+            }
+          }
+
+          // node.each(function (o) {
+          //   console.log("o: ", o)
+          // })
+
+          //source and target of link-id
+          // s = d.source.name;
+          // t = d.target.name;
+          // neighbours = [d.source.index, d.target.index];
+          // for (i = 0; i < neighbours.length; i++) {
+          //   selector = "g#node-" + neighbours[i];
+          //   console.log("select neighbours", d3.select(selector))
+          //   d3.select(selector).select("circle").style("fill", "red");
+          // }
+
+          //console.log("d3.select(node-source): ", d3.select("g#node-22"))
+          
+
+          //find nodes connected to link-id by matching names
+          // d3.selectAll("g.node")
+          //   .filter(function (d) {
+          //     if (d.name === s || d.name === t) {
+          //       console.log("match!")
+          //       console.log('matched d: ', d)
+          //     }
+              
+          //   });
+
+
+        });
+
+      // d3.selectAll("line")
+      //   .filter(function (d) {
+      //     console.log("line d: ", d)
+      //   });
 
       //d3.select(this).attr("class", "unselected");
   });
       
-}); //end mitigation.json
+}); //end SourceTargetPairs.json
 
 }); //end Agreement-link.json
 
@@ -263,6 +330,7 @@ function linkMouseover(d) {
   }
 }
 
+
 //Display document text when link is clicked. Only one link is clickable at a time.
 //If a link has already been selected, it must be unselected before another choice is allowed.
 //Mouse pointers will change accordingly to assist user (see linkMouseover fn).
@@ -278,9 +346,9 @@ function linkMouseClick(d) {
     active_link = "#" + this.id; //save id of activated link
 
     var s = this.id; 
-    if (bibinfo[s]) {
-      var linkref = "Section " + bibinfo[s]['section']+", para. "+bibinfo[s]['para'] +": ";
-      var linkref_text = bibinfo[s]['text'];      
+    if (link_info[s]) {
+      var linkref = "Section " + link_info[s]['section']+", para. "+link_info[s]['para'] +": ";
+      var linkref_text = link_info[s]['text'];      
     } else {
       var linkref = "Section TBA, para. TBA:";
       var linkref_text = "Text TBA";
