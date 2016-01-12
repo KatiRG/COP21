@@ -234,6 +234,14 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     clearAll(); //clear any text displays and activated links
     toggleTimelineButtons(this); //toggle clicked ON and the rest OFF
 
+    node.each(function (d) {     
+      d3.select("g#" + this.id).select("circle").style("fill", my_color[d.group])
+    })
+
+    link.each(function (d) {
+      d3.select("#" + this.id).style("stroke", "#ccc");
+    })
+
     //node.each(function(o) { if(isConnected(d, o)) { connected.push(o); } });
 
   })
