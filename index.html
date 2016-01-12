@@ -58,7 +58,7 @@ ul {
   position: relative;
   height: 20px;
   width: 400px;
-  top: 100px;
+  top: 150px;
   left: 100px;
 }
 
@@ -67,7 +67,7 @@ ul {
   position: relative;
   height: 20px;
   width: 400px;
-  top: 120px;
+  top: 185px;
   left: 100px;
 }
 
@@ -147,7 +147,7 @@ var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-$("svg").css({top: 114, left: 100, position:'absolute'});
+$("svg").css({top: 114, left: 179, position:'absolute'});
 
 d3.json("Agreement-link.json", function(agreementLinks) {
  link_info = agreementLinks;
@@ -253,18 +253,52 @@ d3.json("SourceTargetPairs.json", function(error, json) {
           });
        
     //find link-id from link_info
+    links_in_timeline = [];
+    for (i = 0; i < link.size(); i++) {
+      if (link_info["link-" + i]) {//temporary!!!
+        console.log("link_info[link-i]: ", link_info["link-" + i])
+        if (link_info["link-" + i].timeline === this.id) links_in_timeline.push(i);
+      }
+    }
+    console.log("links_in_timeline: ", links_in_timeline)
 
-    //loop through all links in the timeline selection and fade out nodes outside the timeline selection
-    d3.selectAll(".link#link-40")
-      .filter(function (d) {
-        d3.select(this).style("stroke", "black")
-        for (i = 0; i < node.size(); i++) {
-          if (! ((i == d.source.index) || (i == d.target.index))) {
-            d3.select("g#node-" + i).select("circle").style("fill", "#C0C0C0");
-            d3.select("g#node-" + i).select("circle").attr("class", "differentTime");
-          }
-        }
-      });
+    //highlight links belonging to selected timeline and save source, target pair
+    pair = [];
+    for (j = 0; j < links_in_timeline.length; j++) {
+      d3.select(".link#link-" + links_in_timeline[j])
+        .filter(function (d) {
+          d3.select(this).style("stroke", "black")
+          pair.push(d.source.index);
+          pair.push(d.target.index);
+        });
+    }
+    console.log("pair: ", pair)
+    pair = pair.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
+ 
+    //fade out nodes outside the timeline selection
+    for (i = 0; i < node.size(); i++) {
+      if (pair.indexOf(i) === -1) { //if node is NOT in pair array
+        d3.select("g#node-" + i).select("circle").style("fill", "#C0C0C0");
+        d3.select("g#node-" + i).select("circle").attr("class", "differentTime");
+      }
+    }
+
+    // //loop through all links in the timeline selection and 
+    // for (j = 0; j < links_in_timeline.length; j++) {
+    //   console.log("link#: ", links_in_timeline[j])
+    //   d3.select(".link#link-" + links_in_timeline[j])
+    //     .filter(function (d) {
+    //       console.log("d in loop: ", d)
+    //       d3.select(this).style("stroke", "black")
+    //       //fade out nodes outside the timeline selection
+    //       for (i = 0; i < node.size(); i++) {
+    //         if (! ((i == d.source.index) || (i == d.target.index))) {
+    //           d3.select("g#node-" + i).select("circle").style("fill", "#C0C0C0");
+    //           d3.select("g#node-" + i).select("circle").attr("class", "differentTime");
+    //         }
+    //       }
+    //     });
+    // }  
       
   }
       
