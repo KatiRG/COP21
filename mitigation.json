@@ -20,7 +20,9 @@
     {"name":"Article7-p3","group":0},
     {"name":"Article7-p14c","group":0},
     {"name":"Article 2","group":0},
-    {"name":"SCF","group":2}
+    {"name":"SCF","group":2},
+    {"name":"TEC","group":1},
+    {"name":"CTCN","group":1}
   ],
   "links":[
     {"source":1,"target":0,"value":4},
@@ -60,6 +62,9 @@
     {"source":14,"target":12,"value":4},
     {"source":17,"target":16,"value":4},
     {"source":20,"target":19,"value":4},
-    {"source":20,"target":18,"value":4}
+    {"source":20,"target":18,"value":4},
+    {"source":21,"target":0,"value":4},
+    {"source":22,"target":0,"value":4},
+    {"source":21,"target":22,"value":4}
   ]
 }
