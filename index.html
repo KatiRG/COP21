@@ -233,34 +233,22 @@ d3.json("SourceTargetPairs.json", function(error, json) {
 
   //Fade network that is outside selected Timeline
   function fadeOutsideTimeline(d) {
-    console.log("this: ", this)
-    console.log("this.id: ", this.id)
-    console.log("link_info: ", link_info)
-    console.log("link_info[link-40].timeline: ", link_info["link-40"].timeline)
+    //clear any text displays and activated links
+    clearAll();
 
     // toggle clicked button on and the other buttons off
     d3.selectAll(".nytg-navigation li").attr("class", "");
     d3.select(this).attr("class", "selected");
 
-        d3.selectAll("g.node")
-          .filter(function (d) {
-            console.log("node d: ", d)
-          });
-       
-        d3.selectAll(".link")
-          .filter(function (d) {
-            console.log("link d: ", d)
-          });
+    
        
     //find link-id from link_info
     links_in_timeline = [];
     for (i = 0; i < link.size(); i++) {
       if (link_info["link-" + i]) {//temporary!!!
-        console.log("link_info[link-i]: ", link_info["link-" + i])
         if (link_info["link-" + i].timeline === this.id) links_in_timeline.push(i);
       }
     }
-    console.log("links_in_timeline: ", links_in_timeline)
 
     //highlight links belonging to selected timeline and save source, target pair
     pair = [];
@@ -272,7 +260,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
           pair.push(d.target.index);
         });
     }
-    console.log("pair: ", pair)
+    //extract only unique values
     pair = pair.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
  
     //fade out nodes outside the timeline selection
@@ -282,24 +270,23 @@ d3.json("SourceTargetPairs.json", function(error, json) {
         d3.select("g#node-" + i).select("circle").attr("class", "differentTime");
       }
     }
-
-    // //loop through all links in the timeline selection and 
-    // for (j = 0; j < links_in_timeline.length; j++) {
-    //   console.log("link#: ", links_in_timeline[j])
-    //   d3.select(".link#link-" + links_in_timeline[j])
-    //     .filter(function (d) {
-    //       console.log("d in loop: ", d)
-    //       d3.select(this).style("stroke", "black")
-    //       //fade out nodes outside the timeline selection
-    //       for (i = 0; i < node.size(); i++) {
-    //         if (! ((i == d.source.index) || (i == d.target.index))) {
-    //           d3.select("g#node-" + i).select("circle").style("fill", "#C0C0C0");
-    //           d3.select("g#node-" + i).select("circle").attr("class", "differentTime");
-    //         }
-    //       }
-    //     });
-    // }  
       
+  }
+
+  function clearAll(d) {
+    //clear any text displays and activated links
+    d3.select(".precis_ref").text(function() {return null; });
+    d3.select(".precis").text(function() {return null; });
+
+    //clear highlighted links
+    d3.selectAll("line")
+      .filter(function (d) {
+        if (d3.select(this).classed("selected") == true) {
+          console.log("TRUE")
+          d3.select(this).attr("class", "link");
+          d3.select(this).style("stroke", "#ccc");
+        }
+      });
   }
       
 }); //end SourceTargetPairs.json
