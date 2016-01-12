@@ -101,10 +101,10 @@ ul {
 <div id="title">COP21 Paris Agreement and supporting Decisions</div>
 
 <ul class="nytg-navigation" style='position: absolute; left: 100px; top: -10px;'>
-  <li id="2016">2016</li>
-  <li id="2017">2017</li>
-  <li id="2018">2018</li>
-  <li id="2019">2019</li>
+  <li id="yr2016">2016</li>
+  <li id="yr2017">2017</li>
+  <li id="yr2018">2018</li>
+  <li id="yr2019">2019</li>
   <li id="pre2020">2016-2020</li>
   <li id="all" class="selected">All</li>
 </ul>
@@ -228,16 +228,23 @@ d3.json("SourceTargetPairs.json", function(error, json) {
   });
 
   // action for timeline buttons
-  d3.select("#pre2020").on("click", fadeOutsideTimeline)
+  d3.select("#yr2016").on("click", fadeOutsideTimeline);
+  d3.select("#yr2017").on("click", fadeOutsideTimeline);
+  d3.select("#yr2018").on("click", fadeOutsideTimeline);
+  d3.select("#yr2019").on("click", fadeOutsideTimeline);
+  d3.select("#pre2020").on("click", fadeOutsideTimeline);
+
   
   d3.select("#all").on("click", function() {
     clearAll(); //clear any text displays and activated links
     toggleTimelineButtons(this); //toggle clicked ON and the rest OFF
 
+    //reset node colours back to original
     node.each(function (d) {     
       d3.select("g#" + this.id).select("circle").style("fill", my_color[d.group])
     })
 
+    //reset link colour back to original
     link.each(function (d) {
       d3.select("#" + this.id).style("stroke", "#ccc");
     })
@@ -266,7 +273,10 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     for (j = 0; j < links_in_timeline.length; j++) {
       d3.select(".link#link-" + links_in_timeline[j])
         .filter(function (d) {
-          d3.select(this).style("stroke", "black")
+          d3.select(this)
+            .style("stroke", "black")
+            .attr("class", "selected")
+
           pair.push(d.source.index);
           pair.push(d.target.index);
         });
@@ -274,13 +284,15 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     //extract only unique values
     pair = pair.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
  
-    //fade out nodes outside the timeline selection
-    for (i = 0; i < node.size(); i++) {
-      if (pair.indexOf(i) === -1) { //if node is NOT in pair array
-        d3.select("g#node-" + i).select("circle").style("fill", "#C0C0C0");
-        d3.select("g#node-" + i).select("circle").attr("class", "differentTime");
+    
+    node.each(function (d) {   
+      nodeNum = Number(this.id.split("node-").pop());
+      if (pair.indexOf(nodeNum) === -1 ) {//gray out nodes outside the timeline selection
+        d3.select("g#" + this.id).select("circle").style("fill", "#C0C0C0");
+      } else {//return active nodes to original colours
+        d3.select("g#" + this.id).select("circle").style("fill", my_color[d.group]);
       }
-    }
+    })
       
   }
 
@@ -292,8 +304,9 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     //clear highlighted links
     d3.selectAll("line")
       .filter(function (d) {
+        active_link = "0"; //reset
+        d3.select(this).style("cursor", "pointer");
         if (d3.select(this).classed("selected") == true) {
-          console.log("TRUE")
           d3.select(this).attr("class", "link");
           d3.select(this).style("stroke", "#ccc");
         }
