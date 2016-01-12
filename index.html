@@ -228,84 +228,51 @@ d3.json("SourceTargetPairs.json", function(error, json) {
   });
 
   // action for timeline buttons
-  d3.select("#pre2020")
-    .on("click", function() {
-      console.log("this: ", this)
-      console.log("link_info: ", link_info)
-      console.log("link_info[link-40].timeline: ", link_info["link-40"].timeline)
+  d3.select("#pre2020").on("click", fadeOutsideTimeline)
+   
 
-      // toggle clicked button on and the other buttons off
-      d3.selectAll(".nytg-navigation li").attr("class", "");
-      d3.select(this).attr("class", "selected");
+  //Fade network that is outside selected Timeline
+  function fadeOutsideTimeline(d) {
+    console.log("this: ", this)
+    console.log("this.id: ", this.id)
+    console.log("link_info: ", link_info)
+    console.log("link_info[link-40].timeline: ", link_info["link-40"].timeline)
 
-      d3.selectAll("g.node")
-        .filter(function (d) {
-          console.log("node d: ", d)
-        });
-     
-      d3.selectAll(".link")
-        .filter(function (d) {
-          console.log("link d: ", d)
-        });
-     
-     //find link-id from link_info
-      d3.selectAll(".link#link-40")
-        .filter(function (d) {
-         
-          console.log("link-40 d: ", d)
-          console.log("link-40 d.source.index: ", d.source.index)
-          console.log("link-40 d.target.index: ", d.target.index)
+    // toggle clicked button on and the other buttons off
+    d3.selectAll(".nytg-navigation li").attr("class", "");
+    d3.select(this).attr("class", "selected");
 
-          d3.select(this).style("stroke", "black")
-          for (i = 0; i < node.size(); i++) {
-            if (! ((i == d.source.index) || (i == d.target.index))) {
-              d3.select("g#node-" + i).select("circle").style("fill", "#C0C0C0");
-              d3.select("g#node-" + i).select("circle").attr("class", "differentTime");
-              //d3.select("#link-" + i).style("stroke", "red")
-            }
+        d3.selectAll("g.node")
+          .filter(function (d) {
+            console.log("node d: ", d)
+          });
+       
+        d3.selectAll(".link")
+          .filter(function (d) {
+            console.log("link d: ", d)
+          });
+       
+    //find link-id from link_info
+
+    //loop through all links in the timeline selection and fade out nodes outside the timeline selection
+    d3.selectAll(".link#link-40")
+      .filter(function (d) {
+        d3.select(this).style("stroke", "black")
+        for (i = 0; i < node.size(); i++) {
+          if (! ((i == d.source.index) || (i == d.target.index))) {
+            d3.select("g#node-" + i).select("circle").style("fill", "#C0C0C0");
+            d3.select("g#node-" + i).select("circle").attr("class", "differentTime");
           }
-
-          // node.each(function (o) {
-          //   console.log("o: ", o)
-          // })
-
-          //source and target of link-id
-          // s = d.source.name;
-          // t = d.target.name;
-          // neighbours = [d.source.index, d.target.index];
-          // for (i = 0; i < neighbours.length; i++) {
-          //   selector = "g#node-" + neighbours[i];
-          //   console.log("select neighbours", d3.select(selector))
-          //   d3.select(selector).select("circle").style("fill", "red");
-          // }
-
-          //console.log("d3.select(node-source): ", d3.select("g#node-22"))
-          
-
-          //find nodes connected to link-id by matching names
-          // d3.selectAll("g.node")
-          //   .filter(function (d) {
-          //     if (d.name === s || d.name === t) {
-          //       console.log("match!")
-          //       console.log('matched d: ', d)
-          //     }
-              
-          //   });
-
-
-        });
-
-      // d3.selectAll("line")
-      //   .filter(function (d) {
-      //     console.log("line d: ", d)
-      //   });
-
-      //d3.select(this).attr("class", "unselected");
-  });
+        }
+      });
+      
+  }
       
 }); //end SourceTargetPairs.json
 
 }); //end Agreement-link.json
+
+
 
 //Display full name of text node in larger font
 function textMouseover(d) {
