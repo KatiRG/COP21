@@ -319,6 +319,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     d3.select(button).attr("class", "selected");
   }
 
+  
   //Display document text when link is clicked. Only one link is clickable at a time.
   //If a link has already been selected, it must be unselected before another choice is allowed.
   //Mouse pointers will change accordingly to assist user (see linkMouseover fn).
@@ -326,15 +327,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
   function linkMouseClick(d) {
     // console.log("link!!! source: ", d.source)
     // console.log("link!!! target: ", d.target)
-
-    // link.each(function (d) {
-    //   console.log("this: ", this)
-    //   if (d3.select("#" + this.id).classed("unselected") === true) {
-    //     console.log("select: ", d3.select("#" + this.id).classed("unselected"))
-    //   }          
-    // })
-    console.log("this: ", this)
-    console.log("check: ", d3.select("#" + this.id).classed("unselected"))
+    
     if (d3.select("#" + this.id).classed("unselected") === true) {
       d3.select(this).style("stroke", "red");
       d3.select("#" + this.id).classed("unselected", false);
@@ -364,6 +357,30 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     }
 
   }
+
+  //When hovering, change cursor to pointer only if no link selected. 
+  //If one link selected, only selected link has pointer cursor when hovered over.
+  function linkMouseover(d) {
+
+    var active_linkid;
+
+    //determine if a link has been selected and save its id if so  
+    link.each(function (d) {      
+      if (d3.select("#" + this.id).classed("unselected") === false) {        
+        active_linkid = this.id;
+      }          
+    })
+
+    //change cursor depending on which link is hovered over
+    if (active_linkid) {//a link has been previously selected      
+      if (this.id === active_linkid) d3.select("#" + this.id).style("cursor", "pointer");
+      else d3.select("#" + this.id).style("cursor", "auto"); //deselected links not clickable
+
+    } else {      
+      d3.select("#" + this.id).style("cursor", "pointer"); //all links clickable since no link is active
+    }
+   
+  }
       
 }); //end SourceTargetPairs.json
 
@@ -383,16 +400,7 @@ function textMouseout(d) {
     d3.select(this).text(d.name).style("font-size", "10px");
 }
 
-//When hovering, change cursor to pointer only if no link selected. 
-//If one link selected, only selected link has pointer cursor when hovered over.
-function linkMouseover(d) {
-  if (active_link != "0") {//no link selected
-    if (this.id === active_link.split("#").pop()) d3.select("#" + this.id).style("cursor", "pointer");
-    else d3.select("#" + this.id).style("cursor", "auto"); //deselected links not clickable
-  } else {
-    d3.select("#" + this.id).style("cursor", "pointer"); //all links clickable since no link is active
-  }
-}
+
 
 
 
