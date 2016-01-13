@@ -126,9 +126,6 @@ var width = 1500,
 var color = d3.scale.category20();
 var my_color = ["#ff7f0e", "#1f77b4", "#00c8c8"];
 
-//var precis_text, link_info, active_link;
-var active_link = "0";
-
 
 var nameDict = {};
 nameDict["AdHoc Work Grp"] = "Ad Hoc Working Group";
@@ -266,16 +263,16 @@ d3.json("SourceTargetPairs.json", function(error, json) {
       if (link_info["link-" + i]) {//temporary!!!
         if (link_info["link-" + i].timeline === this.id) links_in_timeline.push(i);
       }
-    }
+    }    
 
     //highlight links belonging to selected timeline and save source, target pair
     pair = [];
     for (j = 0; j < links_in_timeline.length; j++) {
-      d3.select(".link#link-" + links_in_timeline[j])
-        .filter(function (d) {
+      d3.select("#link-" + links_in_timeline[j])
+        .filter(function (d) {          
           d3.select(this)
-            .style("stroke", "black")
-            .attr("class", "selected")
+            .style("stroke", "black")            
+            .attr("class", "link"); //activate link
 
           pair.push(d.source.index);
           pair.push(d.target.index);
@@ -303,18 +300,15 @@ d3.json("SourceTargetPairs.json", function(error, json) {
 
     //clear highlighted links
     d3.selectAll("line")
-      .filter(function (d) {
-        active_link = "0"; //reset
-        d3.select(this).style("cursor", "pointer");
-        if (d3.select(this).classed("selected") == true) {
-          d3.select(this).attr("class", "link");
+      .filter(function (d) {        
+        if (d3.select(this).classed("unselected") === false) {//link has been clicked          
+          d3.select(this).classed("unselected", true);
           d3.select(this).style("stroke", "#ccc");
         }
       });
   }
 
-  function toggleTimelineButtons(button) {
-    // toggle clicked button on and the other buttons off
+  function toggleTimelineButtons(button) {    
     d3.selectAll(".nytg-navigation li").attr("class", "");
     d3.select(button).attr("class", "selected");
   }
@@ -330,8 +324,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     
     if (d3.select("#" + this.id).classed("unselected") === true) {
       d3.select(this).style("stroke", "red");
-      d3.select("#" + this.id).classed("unselected", false);
-      console.log("check after: ", d3.select("#" + this.id).classed("unselected"))
+      d3.select("#" + this.id).classed("unselected", false);      
 
       var s = this.id; 
       if (link_info[s]) {
@@ -348,8 +341,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
 
     } else {
       d3.select(this).style("stroke", "#ccc");
-      d3.select("#" + this.id).classed("unselected", true);
-      console.log("check after2: ", d3.select("#" + this.id).classed("unselected"))
+      d3.select("#" + this.id).classed("unselected", true);      
 
       //remove document text from screen
       d3.select(".precis_ref").text(function() {return null; });
