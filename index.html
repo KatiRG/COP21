@@ -91,6 +91,13 @@ ul {
   stroke: steelblue;
 }
 
+/*http://stackoverflow.com/questions/27238845/manipulate-mouseover-hit-areain-d3-js*/
+.path {
+  stroke: #878f8f;
+  stroke-width: 1.5px;
+  fill:none;
+}
+
 
 </style>
 <body>
@@ -173,17 +180,79 @@ d3.json("SourceTargetPairs.json", function(error, json) {
       .links(json.links)
       .start();
 
-  var link = svg.selectAll(".link")
-      .data(json.links)
-    .enter().append("line")
-      .attr("class", "link")
-      .attr("id", function (d, i) {
-        return "link-" + i;
-      })
-      .style("stroke-width", function(d) { return Math.sqrt(d.value); })
-      //.style("stroke-width", function(d) { return d.value; })
-      .on("click", linkMouseClick)
-      .on("mouseover", linkMouseover);
+   
+
+  // var link = svg.selectAll(".link")
+  //     .data(json.links)
+  //   .enter().append("g")
+  //     .append("line")
+  //     .attr("class", "link")
+  //     .attr("id", function (d, i) {
+  //       return "link-" + i;
+  //     })
+  //     .style("stroke-width", function(d) { return Math.sqrt(d.value); })
+  //     //.style("stroke-width", function(d) { return d.value; })
+  //     .on("click", linkMouseClick)
+  //     .on("mouseover", linkMouseover);
+
+  //http://stackoverflow.com/questions/27238845/manipulate-mouseover-hit-areain-d3-js
+
+  // add the links http://www.d3noob.org/2013/03/d3js-force-directed-graph-example-basic.html
+  var link = svg.append("svg:g").selectAll("path")
+      .data(json.links);
+    // .enter().append("svg:path")
+    //   .attr("class", "link"); 
+  
+  // var link = svg.selectAll(".link")
+  //     .data(json.links);
+      //.attr('class', 'path');
+    //.enter().append("g");
+      // .attr("class", "link")
+      // .attr("id", function (d, i) {
+      //   return "link-" + i;
+      // });
+
+  // Subscribe to mouse events on the entire g
+  gEnter = link.enter()
+      .append('g')      
+      .attr("class", "link")      
+      // .attr("id", function (d, i) {
+      //   return "link-" + i;
+      // })
+      .on('mouseover', function(d) {          
+          alert('mouseover');
+      }).on('mouseout', function(d) {
+          alert('mouseout');
+      });    
+      
+  // Instead of 1 line, append 2 lines inside the g, and make
+  // one of them transparent and "fat", which will enlarge the
+  // hit area
+  lines = gEnter
+      .selectAll('.path').data(['visible', 'invisible']);
+  lines.enter()
+    .append('line')
+    .attr('class', 'path')
+      .attr('marker-end', function(d, i, j) {
+        // j is the parent's i
+        if (j === 2) {
+            return 'url(#arrow)';
+        } else {
+            return null;
+        }
+    })
+    .attr({
+        // returning null from these functions simply defaults to whatever the
+        // .path class's CSS props are doing
+        'stroke-width': function(d, i) { return d == 'invisible' ? 10 : 10 },
+        'stroke': function(d, i) { return d == 'invisible' ? 'transparent' : "red" }
+    });
+
+  console.log("link: ", link)
+  console.log("gEnter: ", gEnter)
+  console.log("lines: ", lines)
+
+  
 
   var node = svg.selectAll(".node")
       .data(json.nodes)
