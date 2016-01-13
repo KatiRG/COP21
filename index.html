@@ -176,7 +176,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
   var link = svg.selectAll(".link")
       .data(json.links)
     .enter().append("line")
-      .attr("class", "link")
+      .attr("class", "link unselected")
       .attr("id", function (d, i) {
         return "link-" + i;
       })
@@ -318,6 +318,52 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     d3.selectAll(".nytg-navigation li").attr("class", "");
     d3.select(button).attr("class", "selected");
   }
+
+  //Display document text when link is clicked. Only one link is clickable at a time.
+  //If a link has already been selected, it must be unselected before another choice is allowed.
+  //Mouse pointers will change accordingly to assist user (see linkMouseover fn).
+  //Note: mouseclick nearest path, see https://groups.google.com/forum/#!topic/d3-js/wbYPPgiy6cE
+  function linkMouseClick(d) {
+    // console.log("link!!! source: ", d.source)
+    // console.log("link!!! target: ", d.target)
+
+    // link.each(function (d) {
+    //   console.log("this: ", this)
+    //   if (d3.select("#" + this.id).classed("unselected") === true) {
+    //     console.log("select: ", d3.select("#" + this.id).classed("unselected"))
+    //   }          
+    // })
+    console.log("this: ", this)
+    console.log("check: ", d3.select("#" + this.id).classed("unselected"))
+    if (d3.select("#" + this.id).classed("unselected") === true) {
+      d3.select(this).style("stroke", "red");
+      d3.select("#" + this.id).classed("unselected", false);
+      console.log("check after: ", d3.select("#" + this.id).classed("unselected"))
+
+      var s = this.id; 
+      if (link_info[s]) {
+        var linkref = "Section " + link_info[s]['section']+", para. "+link_info[s]['para'] +": ";
+        var linkref_text = link_info[s]['text'];      
+      } else {
+        var linkref = "Section TBA, para. TBA:";
+        var linkref_text = "Text TBA";
+      }
+
+      //display document text
+      d3.selectAll(".precis_ref").text(linkref);
+      d3.selectAll(".precis").text(linkref_text);
+
+    } else {
+      d3.select(this).style("stroke", "#ccc");
+      d3.select("#" + this.id).classed("unselected", true);
+      console.log("check after2: ", d3.select("#" + this.id).classed("unselected"))
+
+      //remove document text from screen
+      d3.select(".precis_ref").text(function() {return null; });
+      d3.select(".precis").text(function() {return null; });
+    }
+
+  }
       
 }); //end SourceTargetPairs.json
 
@@ -349,45 +395,6 @@ function linkMouseover(d) {
 }
 
 
-//Display document text when link is clicked. Only one link is clickable at a time.
-//If a link has already been selected, it must be unselected before another choice is allowed.
-//Mouse pointers will change accordingly to assist user (see linkMouseover fn).
-//Note: mouseclick nearest path, see https://groups.google.com/forum/#!topic/d3-js/wbYPPgiy6cE
-function linkMouseClick(d) {
-  // console.log("link!!! source: ", d.source)
-  // console.log("link!!! target: ", d.target)
 
-  //if no link has been previously selected, activate this link
-  if (active_link === "0") {
-    d3.select(this).attr("class", "selected");
-    d3.select(this).style("stroke", "red");
-    active_link = "#" + this.id; //save id of activated link
-
-    var s = this.id; 
-    if (link_info[s]) {
-      var linkref = "Section " + link_info[s]['section']+", para. "+link_info[s]['para'] +": ";
-      var linkref_text = link_info[s]['text'];      
-    } else {
-      var linkref = "Section TBA, para. TBA:";
-      var linkref_text = "Text TBA";
-    }
-
-    d3.selectAll(".precis_ref").text(linkref);
-    d3.selectAll(".precis").text(linkref_text);
-
-  } else { //only previously selected link is clickable (ie to turn it off)
-
-    if (this.id === active_link.split("#").pop()) {//turn off currently active link = previously selected link
-      d3.select(this).attr("class", "unselected");
-      d3.select(this).style("stroke", "#ccc");
-
-      //reset
-      active_link = "0";
-      d3.select(".precis_ref").text(function() {return null; });
-      d3.select(".precis").text(function() {return null; });
-    }
-  }
-
-}
 
 </script>
