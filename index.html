@@ -198,59 +198,68 @@ d3.json("SourceTargetPairs.json", function(error, json) {
   //http://stackoverflow.com/questions/27238845/manipulate-mouseover-hit-areain-d3-js
 
   // add the links http://www.d3noob.org/2013/03/d3js-force-directed-graph-example-basic.html
-  var link = svg.append("svg:g").selectAll("path")
-      .data(json.links);
-    // .enter().append("svg:path")
-    //   .attr("class", "link"); 
+  // var link = svg.append("svg:g").selectAll("path")
+  //     .data(json.links)
+  //   .enter().append("svg:path")
+  //     .attr("class", "link"); 
   
-  // var link = svg.selectAll(".link")
-  //     .data(json.links);
-      //.attr('class', 'path');
-    //.enter().append("g");
-      // .attr("class", "link")
-      // .attr("id", function (d, i) {
-      //   return "link-" + i;
-      // });
+  //http://stackoverflow.com/questions/8663844/add-text-label-onto-links-in-d3-force-directed-graph
+  var link = svg.selectAll("g.link")
+                .data(json.links)
+                .enter().append("svg:g")
+                .attr("id", function (d, i) {
+                  return "link-" + i;
+                });
+
+  link.append("svg:line")
+      .attr("class", "link")
+      .style("stroke-width", function(d) { return Math.sqrt(d.value); })
+      .style("stroke", "blue")
+      .attr("style", "stroke:#00d1d6;stroke-width:4px")
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });           
 
   // Subscribe to mouse events on the entire g
-  gEnter = link.enter()
-      .append('g')      
-      .attr("class", "link")      
-      // .attr("id", function (d, i) {
-      //   return "link-" + i;
-      // })
-      .on('mouseover', function(d) {          
-          alert('mouseover');
-      }).on('mouseout', function(d) {
-          alert('mouseout');
-      });    
+  // gEnter = link.enter()
+  //     .append('g')      
+  //     .attr("class", "link")      
+  //     // .attr("id", function (d, i) {
+  //     //   return "link-" + i;
+  //     // })
+  //     .on('mouseover', function(d) {          
+  //         alert('mouseover');
+  //     }).on('mouseout', function(d) {
+  //         alert('mouseout');
+  //     });    
       
-  // Instead of 1 line, append 2 lines inside the g, and make
-  // one of them transparent and "fat", which will enlarge the
-  // hit area
-  lines = gEnter
-      .selectAll('.path').data(['visible', 'invisible']);
-  lines.enter()
-    .append('line')
-    .attr('class', 'path')
-      .attr('marker-end', function(d, i, j) {
-        // j is the parent's i
-        if (j === 2) {
-            return 'url(#arrow)';
-        } else {
-            return null;
-        }
-    })
-    .attr({
-        // returning null from these functions simply defaults to whatever the
-        // .path class's CSS props are doing
-        'stroke-width': function(d, i) { return d == 'invisible' ? 10 : 10 },
-        'stroke': function(d, i) { return d == 'invisible' ? 'transparent' : "red" }
-    });
+  // // Instead of 1 line, append 2 lines inside the g, and make
+  // // one of them transparent and "fat", which will enlarge the
+  // // hit area
+  // lines = gEnter
+  //     .selectAll('.path').data(['visible', 'invisible']);
+  // lines.enter()
+  //   .append('line')
+  //   .attr('class', 'path')
+  //     .attr('marker-end', function(d, i, j) {
+  //       // j is the parent's i
+  //       if (j === 2) {
+  //           return 'url(#arrow)';
+  //       } else {
+  //           return null;
+  //       }
+  //   })
+  //   .attr({
+  //       // returning null from these functions simply defaults to whatever the
+  //       // .path class's CSS props are doing
+  //       'stroke-width': function(d, i) { return d == 'invisible' ? 10 : 10 },
+  //       'stroke': function(d, i) { return d == 'invisible' ? 'transparent' : "red" }
+  //   });
 
-  console.log("link: ", link)
-  console.log("gEnter: ", gEnter)
-  console.log("lines: ", lines)
+  // console.log("link: ", link)
+  // console.log("gEnter: ", gEnter)
+  // console.log("lines: ", lines)
 
   
 
