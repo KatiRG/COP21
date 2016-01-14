@@ -135,6 +135,7 @@ var my_color = ["#ff7f0e", "#1f77b4", "#00c8c8"];
 
 //var precis_text, link_info, active_link;
 var active_link = "0";
+var links_in_timeline;
 
 
 var nameDict = {};
@@ -381,6 +382,15 @@ function linkMouseover(d) {
 function linkMouseClick(d) {
   // console.log("link!!! source: ", d.source)
   // console.log("link!!! target: ", d.target)
+  console.log("this.id: ", this.id)
+  
+  if (links_in_timeline) {
+    console.log("links_in_timeline: ", links_in_timeline)
+    console.log("this.id: ", this.id)
+    console.log("split:", this.id.split("link-"))
+    //if (this.id.split("#").pop())  
+  }
+  
 
   //if no link has been previously selected, activate this link
   if (active_link === "0") {
