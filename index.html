@@ -209,17 +209,19 @@ d3.json("SourceTargetPairs.json", function(error, json) {
                 .enter().append("svg:g")
                 .attr("id", function (d, i) {
                   return "link-" + i;
-                });
+                })
+                .on("click", linkMouseClick)
+                .on("mouseover", linkMouseover);
 
-  link.append("svg:line")
+  var line = link.append("svg:line")
       .attr("class", "link")
-      .style("stroke-width", function(d) { return Math.sqrt(d.value); })
-      .style("stroke", "blue")
-      .attr("style", "stroke:#00d1d6;stroke-width:4px")
-      .attr("x1", function(d) { return d.source.x; })
-      .attr("y1", function(d) { return d.source.y; })
-      .attr("x2", function(d) { return d.target.x; })
-      .attr("y2", function(d) { return d.target.y; });           
+      .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+      //.attr("style", "stroke:#00d1d6;stroke-width:4px");
+
+  var fatline = link.append("svg:line")
+      .attr("class", "link")
+      .style("stroke-width", function(d) { return Math.sqrt(d.value); })      
+      .attr("style", "stroke:transparent;stroke-width:10px");               
 
   // Subscribe to mouse events on the entire g
   // gEnter = link.enter()
@@ -288,7 +290,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
       .attr("dy", ".35em")
       .text(function(d) { return d.name })
       .on("mouseover", textMouseover)
-      .on("mouseout", textMouseout);
+      .on("mouseout", textMouseout); 
 
   //Display full node name upon circle mouseover    
   // node.append("title")
@@ -297,10 +299,15 @@ d3.json("SourceTargetPairs.json", function(error, json) {
   //     });
 
   force.on("tick", function() {
-    link.attr("x1", function(d) { return d.source.x; })
+    line.attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
+
+    fatline.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });    
 
     node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
   });
@@ -438,6 +445,8 @@ function linkMouseClick(d) {
   //if no link has been previously selected, activate this link
   if (active_link === "0") {
     d3.select(this).attr("class", "selected");
+
+    //d3.select("#link-44").select("line").style("stroke","red")
     d3.select(this).style("stroke", "red");
     active_link = "#" + this.id; //save id of activated link
 
