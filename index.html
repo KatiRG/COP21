@@ -247,11 +247,11 @@ d3.json("SourceTargetPairs.json", function(error, json) {
   });
 
   // action for timeline buttons
-  d3.select("#yr2016").on("click", fadeOutsideTimeline);
-  d3.select("#yr2017").on("click", fadeOutsideTimeline);
-  d3.select("#yr2018").on("click", fadeOutsideTimeline);
-  d3.select("#yr2019").on("click", fadeOutsideTimeline);
-  d3.select("#pre2020").on("click", fadeOutsideTimeline);
+  d3.select("#yr2016").on("click", grayOutsideOfTimeline);
+  d3.select("#yr2017").on("click", grayOutsideOfTimeline);
+  d3.select("#yr2018").on("click", grayOutsideOfTimeline);
+  d3.select("#yr2019").on("click", grayOutsideOfTimeline);
+  d3.select("#pre2020").on("click", grayOutsideOfTimeline);
 
   
   d3.select("#all").on("click", function() {
@@ -274,7 +274,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
    
 
   //Fade network that is outside selected Timeline
-  function fadeOutsideTimeline(d) {
+  function grayOutsideOfTimeline(d) {
     clearAll();  //clear any text displays and activated links
     toggleTimelineButtons(this) //toggle clicked ON and the rest OFF
     
@@ -286,15 +286,17 @@ d3.json("SourceTargetPairs.json", function(error, json) {
         if (link_info["link-" + i].timeline === this.id) links_in_timeline.push(i);
       }
     }
+    console.log("links_in_timeline: ", links_in_timeline)
 
     //highlight links belonging to selected timeline and save source, target pair
     pair = [];
     for (j = 0; j < links_in_timeline.length; j++) {
-      d3.select(".link#link-" + links_in_timeline[j])
+      d3.select("#link-" + links_in_timeline[j])
         .filter(function (d) {
-          d3.select(this)
+          console.log("this: ", this)
+          d3.select("#" + this.id).select(".visible")
             .style("stroke", "black")
-            .attr("class", "selected")
+            .classed(".visible selected", true);
 
           pair.push(d.source.index);
           pair.push(d.target.index);
@@ -326,7 +328,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
         active_link = "0"; //reset
         d3.select(this).style("cursor", "pointer");
         if (d3.select(this).classed("selected") == true) {
-          d3.select(this).attr("class", "link");
+          d3.select(this).attr("class", "visible");
           d3.select(this).style("stroke", "#ccc");
         }
       });
