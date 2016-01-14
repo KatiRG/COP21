@@ -281,19 +281,19 @@ d3.json("SourceTargetPairs.json", function(error, json) {
        
     //find link-id from link_info
     links_in_timeline = [];
-    for (i = 0; i < link.size(); i++) {
+    for (i = 0; i < link.size(); i++) {      
       if (link_info["link-" + i]) {//temporary!!!
-        if (link_info["link-" + i].timeline === this.id) links_in_timeline.push(i);
+        dataTimeline = link_info["link-" + i].timeline;
+        if (dataTimeline === this.id || dataTimeline === "pre2020") links_in_timeline.push(i);
       }
     }
-    console.log("links_in_timeline: ", links_in_timeline)
+    //console.log("links_in_timeline: ", links_in_timeline)
 
     //highlight links belonging to selected timeline and save source, target pair
     pair = [];
     for (j = 0; j < links_in_timeline.length; j++) {
       d3.select("#link-" + links_in_timeline[j])
-        .filter(function (d) {
-          console.log("this: ", this)
+        .filter(function (d) {          
           d3.select("#" + this.id).select(".visible")
             .style("stroke", "black")
             .classed(".visible selected", true);
