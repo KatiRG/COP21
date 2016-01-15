@@ -382,13 +382,13 @@ function linkMouseover(d) {
 function linkMouseClick(d) {
   // console.log("link!!! source: ", d.source)
   // console.log("link!!! target: ", d.target)
-  console.log("this.id: ", this.id)
+  restore_colour = "#ccc";
   
-  if (links_in_timeline) {
-    console.log("links_in_timeline: ", links_in_timeline)
-    console.log("this.id: ", this.id)
-    console.log("split:", this.id.split("link-"))
-    //if (this.id.split("#").pop())  
+  if (links_in_timeline) {   
+    linkNum = Number(this.id.split("link-").pop());
+    if (links_in_timeline.indexOf(linkNum) != -1) {
+      restore_colour = "black";
+    }
   }
   
 
@@ -416,7 +416,7 @@ function linkMouseClick(d) {
 
     if (this.id === active_link.split("#").pop()) {//turn off currently active link = previously selected link
       d3.select(this).attr("class", "unselected");
-      d3.select("#" + this.id).select(".visible").style("stroke", "#ccc");
+      d3.select("#" + this.id).select(".visible").style("stroke", restore_colour);
 
       //reset
       active_link = "0";
