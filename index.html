@@ -169,13 +169,16 @@ var svg = d3.select("body").append("svg")
 $("svg").css({top: 114, left: 179, position:'absolute'});
 
 //circle theme selectors
-var circle_svg = d3.select("#themes")
-                   .append("svg")
+circle_svg = d3.select("#themes")
+                   .append("svg:svg")
                    .attr("width", 700)
-                   .attr("height", 77)
-                   .append("g");
+                   .attr("height", 77);
+ 
+//http://knowledgestockpile.blogspot.fr/2012/01/creating-svg-groups-using-d3js-example.html
+//MITIGATION theme
+groupM = circle_svg.append("svg:g");                 
 
-var circleM = circle_svg.append("circle")
+circleM = groupM.append("svg:circle")
                         .attr("cx", 30)
                         .attr("cy", 30)
                         .attr("r", 15)
@@ -184,12 +187,29 @@ var circleM = circle_svg.append("circle")
                           return "translate(" + 23 + "," + 0 + ")"; 
                         });
 
-var circleM_text = circle_svg.append("text")
+circleM_text = groupM.append("svg:text")
                              .attr("dx", 16)
                              .attr("dy", 65)
                              .text("MITIGATION")
                              .style("font-size","14px");
-                                
+
+//ADAPTATION theme
+groupA = circle_svg.append("svg:g");                 
+
+circleA = groupA.append("svg:circle")
+                        .attr("cx", 150)
+                        .attr("cy", 30)
+                        .attr("r", 15)
+                        .attr("fill", circle_colour[2])
+                        .attr("transform", function(d) { 
+                          return "translate(" + 23 + "," + 0 + ")"; 
+                        });
+
+circleA_text = groupA.append("svg:text")
+                             .attr("dx", 130)
+                             .attr("dy", 65)
+                             .text("ADAPTATION")
+                             .style("font-size","14px");
 
 d3.json("Agreement-link.json", function(agreementLinks) {
  link_info = agreementLinks;
