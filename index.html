@@ -1,1 +1,394 @@
-My Page
+<!--http://bl.ocks.org/mbostock/950642-->
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font-family: Helvetica, sans-serif;
+  color: #585858;
+}
+.nytg-navigation li.selected {
+    background: none repeat scroll 0 0 #e9e9e9;
+    border-color: #aaa;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2) inset;
+    color: #000;
+}
+.nytg-navigation li:first-of-type {
+    border-radius: 4px 0 0 4px;
+}
+.nytg-navigation li:last-of-type {
+    border-radius: 0 4px 4px 0;
+    border-right: 1px solid #ccc;
+}
+.nytg-navigation li {
+    background: none repeat scroll 0 0 #f9f9f9;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    color: #999;
+    cursor: pointer;
+    float: left;
+    font-size: 14px;
+    margin: 0;
+    padding: 10px 18px;
+}
+ul {
+    list-style: outside none none;
+    margin-top: 80px;
+}
+
+#title {
+  font-size: 26px;
+  position: relative;
+  width: 700px;
+  top: 5px;
+  left: 100px;
+}
+
+#infotext {
+  position: relative;
+  width: 700px;
+  top: 93px;
+  left: 100px;
+}
+
+.precis_ref {
+  font-family: serif;
+  position: relative;
+  height: 20px;
+  width: 400px;
+  top: 150px;
+  left: 100px;
+}
+
+.precis {
+  font-family: serif;
+  position: relative;
+  height: 20px;
+  width: 400px;
+  top: 185px;
+  left: 100px;
+}
+
+.link {
+  cursor: pointer;
+  stroke: #ccc;
+}
+
+.node text {
+  /*pointer-events: none;*/
+  cursor: pointer;
+  font: 10px sans-serif;
+  fill: #303030;
+}
+
+/*.node circle {
+  cursor: pointer;
+}*/
+
+.node circle:hover {
+  stroke: steelblue;
+}
+
+
+</style>
+<body>
+<script src="d3.v3.min.js"></script>
+<script src="cola.v3.min.js"></script> <!--http://marvl.infotech.monash.edu/webcola/-->
+<script src="jquery-1.10.2.min.js"></script>
+
+<div id="title">COP21 Paris Agreement and supporting Decisions</div>
+
+<ul class="nytg-navigation" style='position: absolute; left: 100px; top: -10px;'>
+  <li id="yr2016">2016</li>
+  <li id="yr2017">2017</li>
+  <li id="yr2018">2018</li>
+  <li id="yr2019">2019</li>
+  <li id="pre2020">2016-2020</li>
+  <li id="all" class="selected">All</li>
+</ul>
+
+<div id="infotext">
+  Click on a link to highlight it and display the corresponding document text.</br>
+  To deselect a link, click on it again.</br>
+  Only one link can be selected at a time.
+</div> 
+
+<div class="precis_ref"></div>
+<div class="precis"></div>
+
+<script>
+
+var width = 1500,
+    height = 1000;
+
+var color = d3.scale.category20();
+var my_color = ["#ff7f0e", "#1f77b4", "#00c8c8"];
+
+//var precis_text, link_info, active_link;
+var active_link = "0";
+
+
+var nameDict = {};
+nameDict["AdHoc Work Grp"] = "Ad Hoc Working Group";
+nameDict["SBI"] = "Subsidiary Body for Implementation";
+nameDict["FII"] = "Forum on the Impact of the Implementation";
+nameDict["COP-Paris1"] = "COP, Paris Agreement meeting, first session";
+nameDict["Agreement"] = "Paris Agreement";
+nameDict["SBSTA"] = "Subsidiary Body for Scientific and Technological Advice";
+nameDict["AC"] = "Adaptation Committee";
+nameDict["LDCEG"] = "Least Developed Countries Expert Group";
+nameDict["SCF"] = "Standing Committee on Finance";
+nameDict["TEC"] = "Technology Executive Committee";
+nameDict["CTCN"] = "Climate Technology Centre and Network";
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+$("svg").css({top: 114, left: 179, position:'absolute'});
+
+d3.json("Agreement-link.json", function(agreementLinks) {
+ link_info = agreementLinks;
+
+//d3 layout force. Nodes all squished together
+// var force = d3.layout.force()
+//     .gravity(.03)
+//     .distance(200)
+//     //.linkDistance(130)
+//     .charge(-100)
+//     .size([width, height]);
+
+//Replace d3 layout force with cola for better node layout
+var force = cola.d3adaptor()
+    .linkDistance(110)
+    .size([width, height]);    
+
+d3.json("SourceTargetPairs.json", function(error, json) {
+  if (error) throw error;
+
+  force
+      .nodes(json.nodes)
+      .links(json.links)
+      .start();
+
+  var link = svg.selectAll(".link")
+      .data(json.links)
+    .enter().append("line")
+      .attr("class", "link")
+      .attr("id", function (d, i) {
+        return "link-" + i;
+      })
+      .style("stroke-width", function(d) { return Math.sqrt(d.value); })
+      //.style("stroke-width", function(d) { return d.value; })
+      .on("click", linkMouseClick)
+      .on("mouseover", linkMouseover);
+
+  var node = svg.selectAll(".node")
+      .data(json.nodes)
+    .enter().append("g")
+      .attr("class", "node")
+      .attr("id", function (d, i) {
+        return "node-" + i;
+      })
+      .call(force.drag);
+
+  node.append("circle")
+      .attr("r", function (d) {
+        if (d.name === "MITIGATION" || d.name === "ADAPTATION" || d.name === "Agreement") return 15;
+        else if (d.name === "Article 4" || d.name === "Article 7" || d.name === "Article 2") return 10;
+        else return 5;
+      })
+      .style("fill", function(d) { 
+        return my_color[d.group];
+        //return color(d.group);
+      });
+
+  node.append("text")
+      .attr("dx", 12)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name })
+      .on("mouseover", textMouseover)
+      .on("mouseout", textMouseout);
+
+  //Display full node name upon circle mouseover    
+  // node.append("title")
+  //     .text(function(d) {
+  //       return nameDict[d.name]; 
+  //     });
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  });
+
+  // action for timeline buttons
+  d3.select("#yr2016").on("click", fadeOutsideTimeline);
+  d3.select("#yr2017").on("click", fadeOutsideTimeline);
+  d3.select("#yr2018").on("click", fadeOutsideTimeline);
+  d3.select("#yr2019").on("click", fadeOutsideTimeline);
+  d3.select("#pre2020").on("click", fadeOutsideTimeline);
+
+  
+  d3.select("#all").on("click", function() {
+    clearAll(); //clear any text displays and activated links
+    toggleTimelineButtons(this); //toggle clicked ON and the rest OFF
+
+    //reset node colours back to original
+    node.each(function (d) {     
+      d3.select("g#" + this.id).select("circle").style("fill", my_color[d.group])
+    })
+
+    //reset link colour back to original
+    link.each(function (d) {
+      d3.select("#" + this.id).style("stroke", "#ccc");
+    })
+
+    //node.each(function(o) { if(isConnected(d, o)) { connected.push(o); } });
+
+  })
+   
+
+  //Fade network that is outside selected Timeline
+  function fadeOutsideTimeline(d) {
+    clearAll();  //clear any text displays and activated links
+    toggleTimelineButtons(this) //toggle clicked ON and the rest OFF
+    
+       
+    //find link-id from link_info
+    links_in_timeline = [];
+    for (i = 0; i < link.size(); i++) {
+      if (link_info["link-" + i]) {//temporary!!!
+        if (link_info["link-" + i].timeline === this.id) links_in_timeline.push(i);
+      }
+    }
+
+    //highlight links belonging to selected timeline and save source, target pair
+    pair = [];
+    for (j = 0; j < links_in_timeline.length; j++) {
+      d3.select(".link#link-" + links_in_timeline[j])
+        .filter(function (d) {
+          d3.select(this)
+            .style("stroke", "black")
+            .attr("class", "selected")
+
+          pair.push(d.source.index);
+          pair.push(d.target.index);
+        });
+    }
+    //extract only unique values
+    pair = pair.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
+ 
+    
+    node.each(function (d) {   
+      nodeNum = Number(this.id.split("node-").pop());
+      if (pair.indexOf(nodeNum) === -1 ) {//gray out nodes outside the timeline selection
+        d3.select("g#" + this.id).select("circle").style("fill", "#C0C0C0");
+      } else {//return active nodes to original colours
+        d3.select("g#" + this.id).select("circle").style("fill", my_color[d.group]);
+      }
+    })
+      
+  }
+
+  function clearAll(d) {
+    //clear any text displays and activated links
+    d3.select(".precis_ref").text(function() {return null; });
+    d3.select(".precis").text(function() {return null; });
+
+    //clear highlighted links
+    d3.selectAll("line")
+      .filter(function (d) {
+        active_link = "0"; //reset
+        d3.select(this).style("cursor", "pointer");
+        if (d3.select(this).classed("selected") == true) {
+          d3.select(this).attr("class", "link");
+          d3.select(this).style("stroke", "#ccc");
+        }
+      });
+  }
+
+  function toggleTimelineButtons(button) {
+    // toggle clicked button on and the other buttons off
+    d3.selectAll(".nytg-navigation li").attr("class", "");
+    d3.select(button).attr("class", "selected");
+  }
+      
+}); //end SourceTargetPairs.json
+
+}); //end Agreement-link.json
+
+
+
+//Display full name of text node in larger font
+function textMouseover(d) {
+    d3.select(this).text(function (d) {
+      return nameDict[d.name] || d.name; 
+    })
+    .style("font-size", "15px");
+}
+//Return text to original
+function textMouseout(d) {
+    d3.select(this).text(d.name).style("font-size", "10px");
+}
+
+//When hovering, change cursor to pointer only if no link selected. 
+//If one link selected, only selected link has pointer cursor when hovered over.
+function linkMouseover(d) {
+  if (active_link != "0") {//no link selected
+    if (this.id === active_link.split("#").pop()) d3.select("#" + this.id).style("cursor", "pointer");
+    else d3.select("#" + this.id).style("cursor", "auto"); //deselected links not clickable
+  } else {
+    d3.select("#" + this.id).style("cursor", "pointer"); //all links clickable since no link is active
+  }
+}
+
+
+//Display document text when link is clicked. Only one link is clickable at a time.
+//If a link has already been selected, it must be unselected before another choice is allowed.
+//Mouse pointers will change accordingly to assist user (see linkMouseover fn).
+//Note: mouseclick nearest path, see https://groups.google.com/forum/#!topic/d3-js/wbYPPgiy6cE
+function linkMouseClick(d) {
+  // console.log("link!!! source: ", d.source)
+  // console.log("link!!! target: ", d.target)
+
+  //if no link has been previously selected, activate this link
+  if (active_link === "0") {
+    d3.select(this).attr("class", "selected");
+    d3.select(this).style("stroke", "red");
+    active_link = "#" + this.id; //save id of activated link
+
+    var s = this.id; 
+    if (link_info[s]) {
+      var linkref = "Section " + link_info[s]['section']+", para. "+link_info[s]['para'] +": ";
+      var linkref_text = link_info[s]['text'];      
+    } else {
+      var linkref = "Section TBA, para. TBA:";
+      var linkref_text = "Text TBA";
+    }
+
+    d3.selectAll(".precis_ref").text(linkref);
+    d3.selectAll(".precis").text(linkref_text);
+
+  } else { //only previously selected link is clickable (ie to turn it off)
+
+    if (this.id === active_link.split("#").pop()) {//turn off currently active link = previously selected link
+      d3.select(this).attr("class", "unselected");
+      d3.select(this).style("stroke", "#ccc");
+
+      //reset
+      active_link = "0";
+      d3.select(".precis_ref").text(function() {return null; });
+      d3.select(".precis").text(function() {return null; });
+    }
+  }
+
+}
+
+</script>
+>>>>>>> 702be09f81b99c62ef44c104accebc2d7f7746cd
