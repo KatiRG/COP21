@@ -169,7 +169,7 @@ var svg = d3.select("body").append("svg")
 $("svg").css({top: 114, left: 179, position:'absolute'});
 
 //circle theme selectors
-circle_svg = d3.select("#themes")
+var circle_svg = d3.select("#themes")
                    .append("svg:svg")
                    .attr("width", 700)
                    .attr("height", 77);
@@ -239,7 +239,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
   var link = svg.selectAll("g.link")
                 .data(json.links)
                 .enter().append("g")
-                //.attr("class", "parentLink")
+                .attr("class", "parentLink")
                 .attr("id", function (d, i) {
                   return "link-" + i;
                 })
@@ -331,45 +331,46 @@ d3.json("SourceTargetPairs.json", function(error, json) {
 
   //Fade network that is outside selected Timeline
   function grayOutsideOfTimeline(d) {
+    console.log("hello")
     clearAll();  //clear any text displays and activated links
-    toggleTimelineButtons(this) //toggle clicked ON and the rest OFF
+    // toggleTimelineButtons(this) //toggle clicked ON and the rest OFF
     
        
-    //find link-id from link_info
-    links_in_timeline = [];
-    for (i = 0; i < link.size(); i++) {      
-      if (link_info["link-" + i]) {//temporary!!!
-        dataTimeline = link_info["link-" + i].timeline;
-        if (dataTimeline === this.id || dataTimeline === "pre2020") links_in_timeline.push(i);
-      }
-    }
-    //console.log("links_in_timeline: ", links_in_timeline)
+    // //find link-id from link_info
+    // links_in_timeline = [];
+    // for (i = 0; i < link.size(); i++) {      
+    //   if (link_info["link-" + i]) {//temporary!!!
+    //     dataTimeline = link_info["link-" + i].timeline;
+    //     if (dataTimeline === this.id || dataTimeline === "pre2020") links_in_timeline.push(i);
+    //   }
+    // }
+    // //console.log("links_in_timeline: ", links_in_timeline)
 
-    //highlight links belonging to selected timeline and save source, target pair
-    pair = [];
-    for (j = 0; j < links_in_timeline.length; j++) {
-      d3.select("#link-" + links_in_timeline[j])
-        .filter(function (d) {          
-          d3.select("#" + this.id).select(".visible")
-            .style("stroke", "black")
-            .classed(".visible selected", true);
+    // //highlight links belonging to selected timeline and save source, target pair
+    // pair = [];
+    // for (j = 0; j < links_in_timeline.length; j++) {
+    //   d3.select("#link-" + links_in_timeline[j])
+    //     .filter(function (d) {          
+    //       d3.select("#" + this.id).select(".visible")
+    //         .style("stroke", "black")
+    //         .classed(".visible selected", true);
 
-          pair.push(d.source.index);
-          pair.push(d.target.index);
-        });
-    }
-    //extract only unique values
-    pair = pair.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
+    //       pair.push(d.source.index);
+    //       pair.push(d.target.index);
+    //     });
+    // }
+    // //extract only unique values
+    // pair = pair.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
  
     
-    node.each(function (d) {   
-      nodeNum = Number(this.id.split("node-").pop());
-      if (pair.indexOf(nodeNum) === -1 ) {//gray out nodes outside the timeline selection
-        d3.select("g#" + this.id).select("circle").style("fill", "#C0C0C0");
-      } else {//return active nodes to original colours
-        d3.select("g#" + this.id).select("circle").style("fill", circle_colour[d.group]);
-      }
-    })
+    // node.each(function (d) {   
+    //   nodeNum = Number(this.id.split("node-").pop());
+    //   if (pair.indexOf(nodeNum) === -1 ) {//gray out nodes outside the timeline selection
+    //     d3.select("g#" + this.id).select("circle").style("fill", "#C0C0C0");
+    //   } else {//return active nodes to original colours
+    //     d3.select("g#" + this.id).select("circle").style("fill", circle_colour[d.group]);
+    //   }
+    // })
       
   }
 
@@ -380,14 +381,17 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     d3.select(".precis_ref").text(function() {return null; });
     d3.select(".precis").text(function() {return null; });
 
-    d3.selectAll("g")
-      .filter(function (d, i) {        
-        if (this.id.slice(0, 4) === "link") {
-          d3.select(this).style("cursor", "pointer");
-          if (d3.select("#link-" + i).classed("selected") == true) {            
-            d3.select("#link-" + i).classed("selected", false);
-            d3.select("#link-" + i).select(".visible").style("stroke", "#ccc");
-          }
+    d3.selectAll(".parentLink")
+      .filter(function (d) {      
+        console.log("this: ", this)
+        console.log("select: ", d3.select("#" + this.id))
+        d3.select("#" + this.id).select(".visible").style("cursor", "pointer");
+        d3.select("#" + this.id).select(".invisible").style("cursor", "pointer");
+        //console.log("check: ", d3.select("#" + this.id).classed("selected"))
+        if (d3.select("#" + this.id).classed("selected") == true) {    
+          console.log("true")        
+        //   d3.select("#link-" + i).classed("selected", false);
+        //   d3.select("#link-" + i).select(".visible").style("stroke", "#ccc");
         }
       });
   }
