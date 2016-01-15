@@ -91,6 +91,13 @@ ul {
   stroke: steelblue;
 }
 
+/*http://stackoverflow.com/questions/27238845/manipulate-mouseover-hit-areain-d3-js*/
+.path {
+  stroke: #878f8f;
+  stroke-width: 1.5px;
+  fill:none;
+}
+
 
 </style>
 <body>
@@ -128,6 +135,7 @@ var my_color = ["#ff7f0e", "#1f77b4", "#00c8c8"];
 
 //var precis_text, link_info, active_link;
 var active_link = "0";
+var links_in_timeline;
 
 
 var nameDict = {};
@@ -172,18 +180,25 @@ d3.json("SourceTargetPairs.json", function(error, json) {
       .nodes(json.nodes)
       .links(json.links)
       .start();
+  
+  //http://stackoverflow.com/questions/8663844/add-text-label-onto-links-in-d3-force-directed-graph
+  var link = svg.selectAll("g.link")
+                .data(json.links)
+                .enter().append("g")
+                //.attr("class", "parentLink")
+                .attr("id", function (d, i) {
+                  return "link-" + i;
+                })
+                .on("click", linkMouseClick)
+                .on("mouseover", linkMouseover);
 
-  var link = svg.selectAll(".link")
-      .data(json.links)
-    .enter().append("line")
-      .attr("class", "link")
-      .attr("id", function (d, i) {
-        return "link-" + i;
-      })
-      .style("stroke-width", function(d) { return Math.sqrt(d.value); })
-      //.style("stroke-width", function(d) { return d.value; })
-      .on("click", linkMouseClick)
-      .on("mouseover", linkMouseover);
+  var line = link.append("line")
+      .attr("class", "link visible")      
+      .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+  var fatline = link.append("line")
+      .attr("class", "link invisible")      
+      .attr("style", "stroke:transparent;stroke-width:10px"); 
 
   var node = svg.selectAll(".node")
       .data(json.nodes)
@@ -210,7 +225,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
       .attr("dy", ".35em")
       .text(function(d) { return d.name })
       .on("mouseover", textMouseover)
-      .on("mouseout", textMouseout);
+      .on("mouseout", textMouseout); 
 
   //Display full node name upon circle mouseover    
   // node.append("title")
@@ -219,25 +234,31 @@ d3.json("SourceTargetPairs.json", function(error, json) {
   //     });
 
   force.on("tick", function() {
-    link.attr("x1", function(d) { return d.source.x; })
+    line.attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
+
+    fatline.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });    
 
     node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
   });
 
   // action for timeline buttons
-  d3.select("#yr2016").on("click", fadeOutsideTimeline);
-  d3.select("#yr2017").on("click", fadeOutsideTimeline);
-  d3.select("#yr2018").on("click", fadeOutsideTimeline);
-  d3.select("#yr2019").on("click", fadeOutsideTimeline);
-  d3.select("#pre2020").on("click", fadeOutsideTimeline);
+  d3.select("#yr2016").on("click", grayOutsideOfTimeline);
+  d3.select("#yr2017").on("click", grayOutsideOfTimeline);
+  d3.select("#yr2018").on("click", grayOutsideOfTimeline);
+  d3.select("#yr2019").on("click", grayOutsideOfTimeline);
+  d3.select("#pre2020").on("click", grayOutsideOfTimeline);
 
   
   d3.select("#all").on("click", function() {
     clearAll(); //clear any text displays and activated links
     toggleTimelineButtons(this); //toggle clicked ON and the rest OFF
+    links_in_timeline = []; //clear any saved links
 
     //reset node colours back to original
     node.each(function (d) {     
@@ -245,8 +266,8 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     })
 
     //reset link colour back to original
-    link.each(function (d) {
-      d3.select("#" + this.id).style("stroke", "#ccc");
+    link.each(function (d) {      
+      d3.select("#" + this.id).select(".visible").style("stroke", "#ccc");
     })
 
     //node.each(function(o) { if(isConnected(d, o)) { connected.push(o); } });
@@ -255,27 +276,29 @@ d3.json("SourceTargetPairs.json", function(error, json) {
    
 
   //Fade network that is outside selected Timeline
-  function fadeOutsideTimeline(d) {
+  function grayOutsideOfTimeline(d) {
     clearAll();  //clear any text displays and activated links
     toggleTimelineButtons(this) //toggle clicked ON and the rest OFF
     
        
     //find link-id from link_info
     links_in_timeline = [];
-    for (i = 0; i < link.size(); i++) {
+    for (i = 0; i < link.size(); i++) {      
       if (link_info["link-" + i]) {//temporary!!!
-        if (link_info["link-" + i].timeline === this.id) links_in_timeline.push(i);
+        dataTimeline = link_info["link-" + i].timeline;
+        if (dataTimeline === this.id || dataTimeline === "pre2020") links_in_timeline.push(i);
       }
     }
+    //console.log("links_in_timeline: ", links_in_timeline)
 
     //highlight links belonging to selected timeline and save source, target pair
     pair = [];
     for (j = 0; j < links_in_timeline.length; j++) {
-      d3.select(".link#link-" + links_in_timeline[j])
-        .filter(function (d) {
-          d3.select(this)
+      d3.select("#link-" + links_in_timeline[j])
+        .filter(function (d) {          
+          d3.select("#" + this.id).select(".visible")
             .style("stroke", "black")
-            .attr("class", "selected")
+            .classed(".visible selected", true);
 
           pair.push(d.source.index);
           pair.push(d.target.index);
@@ -297,18 +320,20 @@ d3.json("SourceTargetPairs.json", function(error, json) {
   }
 
   function clearAll(d) {
+    active_link = "0"; //reset
+
     //clear any text displays and activated links
     d3.select(".precis_ref").text(function() {return null; });
     d3.select(".precis").text(function() {return null; });
 
-    //clear highlighted links
-    d3.selectAll("line")
-      .filter(function (d) {
-        active_link = "0"; //reset
-        d3.select(this).style("cursor", "pointer");
-        if (d3.select(this).classed("selected") == true) {
-          d3.select(this).attr("class", "link");
-          d3.select(this).style("stroke", "#ccc");
+    d3.selectAll("g")
+      .filter(function (d, i) {        
+        if (this.id.slice(0, 4) === "link") {
+          d3.select(this).style("cursor", "pointer");
+          if (d3.select("#link-" + i).classed("selected") == true) {            
+            d3.select("#link-" + i).classed("selected", false);
+            d3.select("#link-" + i).select(".visible").style("stroke", "#ccc");
+          }
         }
       });
   }
@@ -340,11 +365,15 @@ function textMouseout(d) {
 //When hovering, change cursor to pointer only if no link selected. 
 //If one link selected, only selected link has pointer cursor when hovered over.
 function linkMouseover(d) {
-  if (active_link != "0") {//no link selected
-    if (this.id === active_link.split("#").pop()) d3.select("#" + this.id).style("cursor", "pointer");
-    else d3.select("#" + this.id).style("cursor", "auto"); //deselected links not clickable
-  } else {
-    d3.select("#" + this.id).style("cursor", "pointer"); //all links clickable since no link is active
+  if (d3.select("#" + this.id).classed("selected") === false && active_link === "0") {
+    d3.select("#" + this.id).style("cursor", "pointer");
+    d3.select("#" + this.id).select(".visible").style("cursor", "pointer");
+    d3.select("#" + this.id).select(".invisible").style("cursor", "pointer");
+  } else if (d3.select("#" + this.id).classed("selected") === false && active_link != "0") {    
+    d3.select("#" + this.id).style("cursor", "auto");
+    d3.select("#" + this.id).select(".visible").style("cursor", "auto");
+    d3.select("#" + this.id).select(".invisible").style("cursor", "auto");
+
   }
 }
 
@@ -356,11 +385,22 @@ function linkMouseover(d) {
 function linkMouseClick(d) {
   // console.log("link!!! source: ", d.source)
   // console.log("link!!! target: ", d.target)
+  restore_colour = "#ccc";
+  
+  if (links_in_timeline) {   
+    linkNum = Number(this.id.split("link-").pop());
+    if (links_in_timeline.indexOf(linkNum) != -1) {
+      restore_colour = "black";
+    }
+  }
+  
 
   //if no link has been previously selected, activate this link
   if (active_link === "0") {
     d3.select(this).attr("class", "selected");
-    d3.select(this).style("stroke", "red");
+
+    //select visible line under parent link
+    d3.select("#" + this.id).select(".visible").style("stroke", "red");
     active_link = "#" + this.id; //save id of activated link
 
     var s = this.id; 
@@ -379,7 +419,7 @@ function linkMouseClick(d) {
 
     if (this.id === active_link.split("#").pop()) {//turn off currently active link = previously selected link
       d3.select(this).attr("class", "unselected");
-      d3.select(this).style("stroke", "#ccc");
+      d3.select("#" + this.id).select(".visible").style("stroke", restore_colour);
 
       //reset
       active_link = "0";
@@ -391,4 +431,3 @@ function linkMouseClick(d) {
 }
 
 </script>
->>>>>>> 702be09f81b99c62ef44c104accebc2d7f7746cd
