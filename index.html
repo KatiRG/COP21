@@ -258,6 +258,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
   d3.select("#all").on("click", function() {
     clearAll(); //clear any text displays and activated links
     toggleTimelineButtons(this); //toggle clicked ON and the rest OFF
+    links_in_timeline = []; //clear any saved links
 
     //reset node colours back to original
     node.each(function (d) {     
@@ -265,8 +266,8 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     })
 
     //reset link colour back to original
-    link.each(function (d) {
-      d3.select("#" + this.id).style("stroke", "#ccc");
+    link.each(function (d) {      
+      d3.select("#" + this.id).select(".visible").style("stroke", "#ccc");
     })
 
     //node.each(function(o) { if(isConnected(d, o)) { connected.push(o); } });
@@ -319,18 +320,20 @@ d3.json("SourceTargetPairs.json", function(error, json) {
   }
 
   function clearAll(d) {
+    active_link = "0"; //reset
+
     //clear any text displays and activated links
     d3.select(".precis_ref").text(function() {return null; });
     d3.select(".precis").text(function() {return null; });
 
-    //clear highlighted links
-    d3.selectAll("line")
-      .filter(function (d) {
-        active_link = "0"; //reset
-        d3.select(this).style("cursor", "pointer");
-        if (d3.select(this).classed("selected") == true) {
-          d3.select(this).attr("class", "visible");
-          d3.select(this).style("stroke", "#ccc");
+    d3.selectAll("g")
+      .filter(function (d, i) {        
+        if (this.id.slice(0, 4) === "link") {
+          d3.select(this).style("cursor", "pointer");
+          if (d3.select("#link-" + i).classed("selected") == true) {            
+            d3.select("#link-" + i).classed("selected", false);
+            d3.select("#link-" + i).select(".visible").style("stroke", "#ccc");
+          }
         }
       });
   }
