@@ -1,38 +1,58 @@
 {
-	"link-12" : {
-	"section" : "III",
+	"link-0" : {
+	"section" : "Article 4",
 	"topic" : "Mitigation",
 	"timeline" : "-999",
-	"para" : 34,
-	"verb" : "Further decides ",
-	"text" : "............., for consideration and adoption by the COP serving as the meeting of the Parties to the Paris agreement at its first session, the modalities, work programme and functions of the Forum on the Impact of the Implementation of response measures to address the effects of the implementation of response measures under the Agreement..."
+	"para" : 2,
+	"text" : "Each Party shall prepare, communicate and maintain successive nationally determined contributions that it intends to achieve. Parties shall pursue domestic mitigation measures, with the aim of achieving the objectives of such contributions."
 	},
 
-	"link-14" : {
-	"section" : "III",
+	"link-1" : {
+	"section" : "Article 4",
 	"topic" : "Mitigation",
 	"timeline" : "-999",
-	"para" : 29,
-	"verb" : "Also requests ",
-	"text" : "The Subsidiary Body for Implementation is requested to develop  modalities and procedures for the operation and use of the public registry (see Article 4, para 12) for consideration and adoption at the meeting of Parties to the Paris Agreement, first session."
+	"para" : 9,
+	"text" : "Each Party shall communicate a nationally determined contribution every five years in accordance with decision 1/CP.21 and any relevant decisions of the Conference of the Parties serving as the meeting of the Parties to the Paris Agreement and be informed by the outcomes of the global stock take referred to in Article 14."
 	},
 
-	"link-13" : {
-	"section" : "III",
+	"link-2" : {
+	"section" : "Article 4",
 	"topic" : "Mitigation",
 	"timeline" : "-999",
-	"para" : 34,
-	"verb" : "Further requests ",
-	"text" : "The SBI and SBSTA shall recommend, for consideration and adoption at the meeting of the Parties to the Paris agreement at its first session, the modalities, work programme and functions of the Forum on the Impact of the Implementation of response measures to address the effects of the implementation of response measures under the Agreement by enhancing cooperation amongst Parties on understanding the impacts of mitigation actions under the Agreement and the exchange of information, experiences, and best practices amongst Parties to raise their resilience to these impacts."
+	"para" : 12,
+	"text" : "Nationally determined contributions communicated by Parties shall be recorded in a public registry maintained by the secretariat."
 	},
 
-	"link-15" : {
-	"section" : "III",
+	"link-3" : {
+	"section" : "Article 4",
 	"topic" : "Mitigation",
 	"timeline" : "-999",
-	"para" : 34,
-	"verb" : "Further requests ",
-	"text" : "The SBI and SBSTA shall recommend, for consideration and adoption at the meeting of the Parties to the Paris agreement at its first session, the modalities, work programme and functions of the Forum on the Impact of the Implementation of response measures to address the effects of the implementation of response measures under the Agreement by enhancing cooperation amongst Parties on understanding the impacts of mitigation actions under the Agreement and the exchange of information, experiences, and best practices amongst Parties to raise their resilience to these impacts."
+	"para" : 13,
+	"text" : "Parties shall account for their nationally determined contributions. In accounting for anthropogenic  emissions and removals corresponding to their nationally determined contributions, Parties shall promote environmental integrity, transparency, accuracy, completeness, comparability and  consistency, and ensure the avoidance of double counting, in accordance with guidance adopted by the Conference of the Parties serving as the meeting of the Parties to the Paris Agreement."
+	},
+
+	"link-4" : {
+	"section" : "Article 4",
+	"topic" : "Mitigation",
+	"timeline" : "-999",
+	"para" : 1,
+	"text" : "In order to achieve the long-term temperature goal set out in Article 2, Parties aim to reach global peaking of greenhouse gas emissions as soon as possible, recognizing that peaking will take longer for developing country Parties, and to undertake rapid reductions thereafter in accordance with best available science, so as to achieve a balance between anthropogenic emissions by sources and removals by sinks of greenhouse gases in the second half of this century, on the basis of equity, and in the context of sustainable development and efforts to eradicate poverty."
+	},
+
+	"link-5" : {
+	"section" : "Article 4",
+	"topic" : "Mitigation",
+	"timeline" : "-999",
+	"para" : 19,
+	"text" : "All Parties should strive to formulate and communicate long-term low greenhouse gas emission development strategies, mindful of Article 2 taking into account their common but differentiated  responsibilities and respective capabilities, in the light of different national circumstances."
+	},
+
+	"link-6" : {
+	"section" : "Decision III",
+	"topic" : "Mitigation",
+	"timeline" : "-999",
+	"para" : 33,
+	"text" : "The Forum on the Impact of the Implementation of response measures, under the subsidiary bodies, shall continue, and shall serve the Agreement."
 	},
 
 	"link-16" : {
@@ -40,35 +60,7 @@
 	"topic" : "Mitigation",
 	"timeline" : "-999",
 	"para" : 34,
-	"verb" : "Further requests ",
 	"text" : "The SBI and SBSTA shall recommend, for consideration and adoption at the meeting of the Parties to the Paris agreement at its first session, the modalities, work programme and functions of the Forum on the Impact of the Implementation of response measures to address the effects of the implementation of response measures under the Agreement by enhancing cooperation amongst Parties on understanding the impacts of mitigation actions under the Agreement and the exchange of information, experiences, and best practices amongst Parties to raise their resilience to these impacts."
-	},
-
-	"link-18" : {
-	"section" : "III",
-	"topic" : "Mitigation",
-	"timeline" : "-999",
-	"para" : 29,
-	"verb" : "Also requests ",
-	"text" : "The Subsidiary Body for Implementation is requested to develop  modalities and procedures for the operation and use of the public registry (see Article 4, para 12) for consideration and adoption at the meeting of Parties to the Paris Agreement, first session."
-	},
-
-	"link-40" : {
-	"section" : "IV",
-	"topic" : "ENHANCED ACTION PRIOR TO 2020 - Mitigation",
-	"timeline" : "pre2020",
-	"para" : 110,
-	"verb" : "Resolves ",
-	"text" : "To strengthen the existing technical examination process on mitigation as defined in decision 1/CP.19, paragraph 5(a), and decision 1/CP.20, paragraph 19, taking into account the latest scientific knowledge, including by (a) Encouraging Parties, Convention bodies and international organizations to engage in this process, including, as appropriate, in cooperation with relevant non-Party stakeholders...; (b) Striving to improve, in consultation with Parties, access to and participation in this process by developing country Party and non-Party experts; (c) Requesting the Technology Executive Committee and the Climate Technology Centre and Network in accordance with their respective mandates...Paragraph 113: This process should be organized jointly by the SBI and SBSTA and should take place on an ongoing basis until 2020."
-	},
-
-	"link-42" : {
-	"section" : "IV",
-	"topic" : "ENHANCED ACTION PRIOR TO 2020 - Mitigation",
-	"timeline" : "pre2020",
-	"para" : 110,
-	"verb" : "Resolves ",
-	"text" : "To strengthen the existing technical examination process on mitigation as defined in decision 1/CP.19, paragraph 5(a), and decision 1/CP.20, paragraph 19, taking into account the latest scientific knowledge, including by (a) Encouraging Parties, Convention bodies and international organizations to engage in this process, including, as appropriate, in cooperation with relevant non-Party stakeholders...; (b) Striving to improve, in consultation with Parties, access to and participation in this process by developing country Party and non-Party experts; (c) Requesting the Technology Executive Committee and the Climate Technology Centre and Network in accordance with their respective mandates...Paragraph 113: This process should be organized jointly by the SBI and SBSTA and should take place on an ongoing basis until 2020."
 	},
 
 	"link-44" : {
@@ -76,7 +68,6 @@
 	"topic" : "ENHANCED ACTION PRIOR TO 2020 - Mitigation",
 	"timeline" : "pre2020",
 	"para" : 110,
-	"verb" : "Resolves ",
 	"text" : "To strengthen the existing technical examination process on mitigation as defined in decision 1/CP.19, paragraph 5(a), and decision 1/CP.20, paragraph 19, taking into account the latest scientific knowledge, including by (a) Encouraging Parties, Convention bodies and international organizations to engage in this process, including, as appropriate, in cooperation with relevant non-Party stakeholders...; (b) Striving to improve, in consultation with Parties, access to and participation in this process by developing country Party and non-Party experts; (c) Requesting the Technology Executive Committee and the Climate Technology Centre and Network in accordance with their respective mandates...Paragraph 113: This process should be organized jointly by the SBI and SBSTA and should take place on an ongoing basis until 2020."
 	}
 
