@@ -7,7 +7,16 @@
     {"name":"Account for NDCs-4para13","group":0},
     {"name":"GHG emissions","group":0},
     {"name":"Reduction Strategies-4para19","group":0},
-    {"name":"Forum II","group":0}
+    {"name":"Forum II","group":0},
+    {"name":"Update every 5 yrs-Decision III.23, 24","group":1},
+    {"name":"Submit 9 to 12 months in advance-Decision III.25","group":1},
+    {"name":"AdHoc Work Grp guidelines-Decision III.26","group":1},
+    {"name":"Secretariat interm version-Decision III.30","group":1},
+    {"name":"SBI input-Decision III.29","group":1},
+    {"name":"Secretariat publish online-Decision III.36","group":1},
+    {"name":"AdHoc Work Grp guidance-Decision III.31","group":1},
+    {"name":"SBSTA recommendations-Decision III.34","group":1},
+    {"name":"SBI recommendations-Decision III.34","group":1}
   ],
   "links":[
     {"source":0,"target":1,"value":4},
@@ -16,6 +25,15 @@
     {"source":1,"target":4,"value":4},
     {"source":0,"target":5,"value":4},
     {"source":5,"target":6,"value":4},
-    {"source":0,"target":7,"value":4}
+    {"source":0,"target":7,"value":4},
+    {"source":2,"target":8,"value":4},
+    {"source":1,"target":9,"value":4},
+    {"source":1,"target":10,"value":4},
+    {"source":3,"target":11,"value":4},
+    {"source":3,"target":12,"value":4},
+    {"source":6,"target":13,"value":4},
+    {"source":4,"target":14,"value":4},
+    {"source":7,"target":15,"value":4},
+    {"source":7,"target":16,"value":4}
   ]
 }

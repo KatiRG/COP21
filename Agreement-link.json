@@ -55,20 +55,76 @@
 	"text" : "The Forum on the Impact of the Implementation of response measures, under the subsidiary bodies, shall continue, and shall serve the Agreement."
 	},
 
-	"link-16" : {
-	"section" : "III",
+	"link-7" : {
+	"section" : "Decision III",
+	"topic" : "Mitigation",
+	"timeline" : "-999",
+	"para" : 23,
+	"text" : "[The Conference of the Parties] Urges those Parties whose intended nationally determined contribution pursuant to decision 1/CP.20  contains a time frame up to 2025 (para 23)/2030 (para 24) to communicate by 2020 a new nationally determined contribution and  to do so every five years thereafter pursuant to Article 4, paragraph 9, of the Agreement."
+	},
+
+	"link-8" : {
+	"section" : "Decision III",
+	"topic" : "Mitigation",
+	"timeline" : "-999",
+	"para" : 25,
+	"text" : "[The Conference of the Parties] Decides that Parties shall submit to the secretariat their  nationally determined contributions referred to in Article 4 of the Agreement at least 9 to 12 months in advance of the relevant meeting of the Conference of the Parties serving as the meeting of the Parties to   the Paris Agreement with a view to facilitating the clarity, transparency and understanding of these contributions, including through a synthesis report prepared by the secretariat."
+	},
+
+	"link-9" : {
+	"section" : "Decision III",
+	"topic" : "Mitigation",
+	"timeline" : "-999",
+	"para" : 26,
+	"text" : "[The Conference of the Parties] Requests the Ad Hoc Working Group on the Paris Agreement to develop further guidance on features of the nationally determined contributions for consideration and adoption by the Conference of the Parties serving as the meeting of the Parties to the Paris Agreement at its first session."
+	},
+
+	"link-10" : {
+	"section" : "Decision III",
+	"topic" : "Mitigation",
+	"timeline" : "-999",
+	"para" : 30,
+	"text" : "[The Conference of the Parties] Further requests the secretariat to make available an interim public registry in the first half of 2016 for the recording of nationally determined contributions submitted in accordance with Article 4 of the Agreement, pending the adoption by the Conference of the Parties  serving as the meeting of the Parties to the Paris Agreement of the modalities and procedures referred to in paragraph 29."
+	},
+
+	"link-11" : {
+	"section" : "Decision III",
+	"topic" : "Mitigation",
+	"timeline" : "-999",
+	"para" : 29,
+	"text" : "[The Conference of the Parties] Also requests the Subsidiary Body for Implementation to develop modalities and procedures for the operation and use of the public registry referred to in Article 4, paragraph 12, of the Agreement, for consideration and adoption by the Conference of the Parties  serving as the meeting of the Parties to the Paris Agreement at its first session."
+	},
+
+	"link-12" : {
+	"section" : "Decision III",
+	"topic" : "Mitigation",
+	"timeline" : "-999",
+	"para" : 36,
+	"text" : "[The Conference of the Parties] Invites Parties to communicate, by 2020, to the secretariat mid-century, long-term low greenhouse gas emission development strategies in accordance with Article 4, paragraph 19, of the Agreement, and requests the secretariat to publish on the UNFCCC website Parties’ low greenhouse gas emission development strategies as communicated."
+	},
+
+	"link-13" : {
+	"section" : "Decision III",
+	"topic" : "Mitigation",
+	"timeline" : "-999",
+	"para" : 31,
+	"text" : "[The Conference of the Parties] Requests the Ad Hoc Working Group on the Paris Agreement to elaborate, drawing from approaches established under the Convention and its related legal instruments as appropriate, guidance for accounting for Parties’ nationally determined contributions, as referred to in Article 4, paragraph 13, of the Agreement, for consideration and adoption by the Conference of the Parties serving as the meeting of the Parties to the Paris Agreement at its first session...Read more"
+	},
+
+	"link-14" : {
+	"section" : "Decision III",
 	"topic" : "Mitigation",
 	"timeline" : "-999",
 	"para" : 34,
-	"text" : "The SBI and SBSTA shall recommend, for consideration and adoption at the meeting of the Parties to the Paris agreement at its first session, the modalities, work programme and functions of the Forum on the Impact of the Implementation of response measures to address the effects of the implementation of response measures under the Agreement by enhancing cooperation amongst Parties on understanding the impacts of mitigation actions under the Agreement and the exchange of information, experiences, and best practices amongst Parties to raise their resilience to these impacts."
+	"text" : "[The Conference of the Parties] Further decides that the Subsidiary Body for Scientific and Technological Advice and the Subsidiary Body for Implementation shall recommend, for consideration and adoption by the Conference of the Parties serving as the meeting of the Parties to the Paris Agreement at its first session, the modalities, work programme and functions of the Forum on the Impact  of the Implementation of response measures to address the effects of the implementation of response measures under the Agreement by enhancing cooperation amongst Parties on understanding the impacts of mitigation actions under the Agreement and the exchange of information, experiences, and best practices amongst Parties to raise their resilience to these impacts."
 	},
 
-	"link-44" : {
-	"section" : "IV",
-	"topic" : "ENHANCED ACTION PRIOR TO 2020 - Mitigation",
-	"timeline" : "pre2020",
-	"para" : 110,
-	"text" : "To strengthen the existing technical examination process on mitigation as defined in decision 1/CP.19, paragraph 5(a), and decision 1/CP.20, paragraph 19, taking into account the latest scientific knowledge, including by (a) Encouraging Parties, Convention bodies and international organizations to engage in this process, including, as appropriate, in cooperation with relevant non-Party stakeholders...; (b) Striving to improve, in consultation with Parties, access to and participation in this process by developing country Party and non-Party experts; (c) Requesting the Technology Executive Committee and the Climate Technology Centre and Network in accordance with their respective mandates...Paragraph 113: This process should be organized jointly by the SBI and SBSTA and should take place on an ongoing basis until 2020."
+	"link-15" : {
+	"section" : "Decision III",
+	"topic" : "Mitigation",
+	"timeline" : "-999",
+	"para" : 34,
+	"text" : "[The Conference of the Parties] Further decides that the Subsidiary Body for Scientific and Technological Advice and the Subsidiary Body for Implementation shall recommend, for consideration and adoption by the Conference of the Parties serving as the meeting of the Parties to the Paris Agreement at its first session, the modalities, work programme and functions of the Forum on the Impact  of the Implementation of response measures to address the effects of the implementation of response measures under the Agreement by enhancing cooperation amongst Parties on understanding the impacts of mitigation actions under the Agreement and the exchange of information, experiences, and best practices amongst Parties to raise their resilience to these impacts."
 	}
 
 }
