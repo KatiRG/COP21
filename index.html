@@ -152,15 +152,20 @@ var links_in_timeline;
 var nameDict = {};
 nameDict["AdHoc Work Grp"] = "Ad Hoc Working Group";
 nameDict["SBI"] = "Subsidiary Body for Implementation";
+nameDict["SBI input-Decision III.29"] = "Subsidiary Body for Implementation input";
+nameDict["SBI recommendations-Decision III.34"] = "Subsidiary Body for Implementation recommendations";
 nameDict["FII"] = "Forum on the Impact of the Implementation";
 nameDict["COP-Paris1"] = "COP, Paris Agreement meeting, first session";
 nameDict["Agreement"] = "Paris Agreement";
 nameDict["SBSTA"] = "Subsidiary Body for Scientific and Technological Advice";
+nameDict["SBSTA recommendations-Decision III.34"] = "Subsidiary Body for Scientific and Technological Advice recommendations";
 nameDict["AC"] = "Adaptation Committee";
 nameDict["LDCEG"] = "Least Developed Countries Expert Group";
 nameDict["SCF"] = "Standing Committee on Finance";
 nameDict["TEC"] = "Technology Executive Committee";
 nameDict["CTCN"] = "Climate Technology Centre and Network";
+nameDict["Forum II"] = "Forum on the Impact of the Implementation";
+nameDict["NDCs"] = "Nationally Determined Contributions";
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -229,6 +234,7 @@ var force = cola.d3adaptor()
 
 d3.json("SourceTargetPairs.json", function(error, json) {
   if (error) throw error;
+  console.log("json: ", json)
 
   force
       .nodes(json.nodes)
@@ -264,10 +270,10 @@ d3.json("SourceTargetPairs.json", function(error, json) {
       .call(force.drag);
 
   node.append("circle")
-      .attr("r", function (d) {
-        if (d.name === "MITIGATION" || d.name === "ADAPTATION" || d.name === "Agreement") return 15;
+      .attr("r", function (d) {        
+        if (d.name.split("-")[0] === "MITIGATION" || d.name === "ADAPTATION") return 18;
         else if (d.name === "Article 4" || d.name === "Article 7" || d.name === "Article 2") return 10;
-        else return 5;
+        else return 8;
       })
       .style("fill", function(d) { 
         return circle_colour[d.group];
@@ -275,11 +281,21 @@ d3.json("SourceTargetPairs.json", function(error, json) {
       });
 
   node.append("text")
-      .attr("dx", 12)
+      .attr("dx", 18)
       .attr("dy", ".35em")
-      .text(function(d) { return d.name })
+      .text(function(d) {
+        return d.name.split("-")[0]
+      })
       .on("mouseover", textMouseover)
       .on("mouseout", textMouseout); 
+  //second line of node text
+  node.append("text")
+      .attr("transform","translate(0, 12)")
+      .attr("dx", 18)
+      .attr("dy", ".35em")
+      .text(function(d) {
+        return d.name.split("-")[1];
+      });
 
   //Display full node name upon circle mouseover    
   // node.append("title")
@@ -412,13 +428,13 @@ d3.json("SourceTargetPairs.json", function(error, json) {
 //Display full name of text node in larger font
 function textMouseover(d) {
     d3.select(this).text(function (d) {
-      return nameDict[d.name] || d.name; 
+      return nameDict[d.name] || d.name.split("-")[0]; 
     })
     .style("font-size", "15px");
 }
 //Return text to original
 function textMouseout(d) {
-    d3.select(this).text(d.name).style("font-size", "10px");
+    d3.select(this).text(d.name.split("-")[0]).style("font-size", "10px");
 }
 
 //When hovering, change cursor to pointer only if no link selected. 
@@ -464,7 +480,7 @@ function linkMouseClick(d) {
 
     var s = this.id; 
     if (link_info[s]) {
-      var linkref = "Section " + link_info[s]['section']+", para. "+link_info[s]['para'] +": ";
+      var linkref = link_info[s]['section']+", para. "+link_info[s]['para'] +": ";
       var linkref_text = link_info[s]['text'];      
     } else {
       var linkref = "Section TBA, para. TBA:";
