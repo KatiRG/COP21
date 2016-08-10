@@ -58,7 +58,7 @@ var links_in_timeline;
 
 
 var nameDict = {};
-nameDict["AdHoc Work Grp"] = "Ad Hoc Working Group";
+nameDict["Ad Hoc Work Grp"] = "Ad Hoc Working Group";
 nameDict["SBI"] = "Subsidiary Body for Implementation (SBI)";
 nameDict["SBI input-Decision III.29"] = "Subsidiary Body for Implementation (SBI) input";
 nameDict["SBI recommendations-Decision III.34"] = "Subsidiary Body for Implementation (SBI) recommendations";
@@ -165,6 +165,9 @@ d3.json("SourceTargetPairs.json", function(error, json) {
                 //.attr("class", "parentLink")
                 .attr("id", function (d, i) {
                   return "link-" + i;
+                })
+                .attr("class", function (d) {
+                  return d.source.linkClass;
                 })
                 .on("click", linkMouseClick)
                 .on("mouseover", linkMouseover);
@@ -353,7 +356,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     "Climate Technology Centre and Network", "CTCN", 
     "Forum on the Impact of the Implementation (Forum II)",
     "Nationally Determined Contributions", "NDCs",
-    "Secretariat"
+    "Secretariat", "Registry"
 
   ]
   
@@ -378,10 +381,16 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     if (selectedVal) {
       //Loop through all nodes
       var d = svg.selectAll(".node").filter(function (d, i) {
-        //if search word is not in node name, reduce opacity of node
+        
+        //if search word is not in node name, reduce opacity of node and link
         if (d.name.indexOf(getKeyByValue(nameDict, selectedVal)) === -1 &&
                                         d.name.indexOf(selectedVal) === -1) {
+          //node opacity
           d3.select(this).style("opacity", 0.3);
+
+          //link opacity
+          d3.selectAll("." + d.linkClass).style("opacity", 0.3);
+
         }
 
       });
