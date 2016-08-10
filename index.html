@@ -2,115 +2,17 @@
 
 <!DOCTYPE html>
 <meta charset="utf-8">
-<style>
 
-body {
-  font-family: Helvetica, sans-serif;
-  color: #585858;
-}
-.nytg-navigation li.selected {
-    background: none repeat scroll 0 0 #e9e9e9;
-    border-color: #aaa;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2) inset;
-    color: #000;
-}
-.nytg-navigation li:first-of-type {
-    border-radius: 4px 0 0 4px;
-}
-.nytg-navigation li:last-of-type {
-    border-radius: 0 4px 4px 0;
-    border-right: 1px solid #ccc;
-}
-.nytg-navigation li {
-    background: none repeat scroll 0 0 #f9f9f9;
-    border-bottom: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-    border-top: 1px solid #ccc;
-    color: #999;
-    cursor: pointer;
-    float: left;
-    font-size: 14px;
-    margin: 0;
-    padding: 10px 18px;
-}
-ul {
-    list-style: outside none none;
-    margin-top: 80px;
-}
-
-#title {
-  font-size: 26px;
-  position: relative;
-  width: 700px;
-  top: 5px;
-  left: 100px;
-}
-
-#infotext {
-  position: relative;
-  width: 700px;
-  top: 22px;
-  left: 100px;
-}
-
-.precis_ref {
-  font-family: serif;
-  position: relative;
-  height: 20px;
-  width: 400px;
-  top: 64px;
-  left: 100px;
-}
-
-.precis {
-  font-family: serif;
-  position: relative;
-  height: 20px;
-  width: 400px;
-  top: 99px;
-  left: 100px;
-}
-
-#themes {  
-  position: relative;
-  width: 700px;
-  top: -7px;
-  left: 800px;
-}
-
-.link {
-  cursor: pointer;
-  stroke: #ccc;
-}
-
-.node text {
-  /*pointer-events: none;*/
-  cursor: pointer;
-  font: 10px sans-serif;
-  fill: #303030;
-}
-
-/*.node circle {
-  cursor: pointer;
-}*/
-
-.node circle:hover {
-  stroke: steelblue;
-}
-
-/*http://stackoverflow.com/questions/27238845/manipulate-mouseover-hit-areain-d3-js*/
-.path {
-  stroke: #878f8f;
-  stroke-width: 1.5px;
-  fill:none;
-}
-
-
-</style>
 <body>
+<script src="bower_components/jquery/dist/jquery.min.js"></script> 
+<link rel="stylesheet" href="bower_components/jquery-ui/themes/ui-lightness/jquery-ui.min.css">
+<script src="bower_components/jquery-ui/jquery-ui.js"></script>
+
 <script src="d3.v3.min.js"></script>
 <script src="cola.v3.min.js"></script> <!--http://marvl.infotech.monash.edu/webcola/-->
-<script src="jquery-1.10.2.min.js"></script>
+<!--<script src="jquery-1.10.2.min.js"></script>-->
+
+<link href="style.css" rel="stylesheet" type="text/css">
 
 <div id="title">COP21 Paris Agreement and supporting Decisions</div>
 
@@ -124,8 +26,13 @@ ul {
 </ul>
 
 <div id="themes">
-  Themes:
-</div> 
+  <!--Themes:-->
+</div>
+
+<div class='ui-widget'><input id='search'></div>
+<ul class="nytg-sort" style='position: absolute; right: 362px; top: -32px;'>
+  <li id="clearSearch">Clear</li>          
+</ul>
 
 <div id="infotext">
   Click on a link to highlight it and display the corresponding document text.</br>
@@ -135,6 +42,7 @@ ul {
 
 <div class="precis_ref"></div>
 <div class="precis"></div>
+<div id="graphLayout"></div>
 
 <script>
 
@@ -150,24 +58,26 @@ var links_in_timeline;
 
 
 var nameDict = {};
-nameDict["AdHoc Work Grp"] = "Ad Hoc Working Group";
-nameDict["SBI"] = "Subsidiary Body for Implementation";
-nameDict["SBI input-Decision III.29"] = "Subsidiary Body for Implementation input";
-nameDict["SBI recommendations-Decision III.34"] = "Subsidiary Body for Implementation recommendations";
-nameDict["FII"] = "Forum on the Impact of the Implementation";
+nameDict["Ad Hoc Work Grp"] = "Ad Hoc Working Group";
+nameDict["SBI"] = "Subsidiary Body for Implementation (SBI)";
+nameDict["SBI input-Decision III.29"] = "Subsidiary Body for Implementation (SBI) input";
+nameDict["SBI recommendations-Decision III.34"] = "Subsidiary Body for Implementation (SBI) recommendations";
 nameDict["COP-Paris1"] = "COP, Paris Agreement meeting, first session";
 nameDict["Agreement"] = "Paris Agreement";
-nameDict["SBSTA"] = "Subsidiary Body for Scientific and Technological Advice";
-nameDict["SBSTA recommendations-Decision III.34"] = "Subsidiary Body for Scientific and Technological Advice recommendations";
-nameDict["AC"] = "Adaptation Committee";
-nameDict["LDCEG"] = "Least Developed Countries Expert Group";
-nameDict["SCF"] = "Standing Committee on Finance";
-nameDict["TEC"] = "Technology Executive Committee";
-nameDict["CTCN"] = "Climate Technology Centre and Network";
-nameDict["Forum II"] = "Forum on the Impact of the Implementation";
-nameDict["NDCs"] = "Nationally Determined Contributions";
+nameDict["SBSTA"] = "Subsidiary Body for Scientific and Technological Advice (SBSTA)";
+nameDict["SBSTA recommendations-Decision III.34"] = "Subsidiary Body for Scientific and Technological Advice (SBSTA) recommendations";
+nameDict["AC"] = "Adaptation Committee (AC)";
+nameDict["LDCEG"] = "Least Developed Countries Expert Group (LDCEG)";
+nameDict["SCF"] = "Standing Committee on Finance (SCF)";
+nameDict["TEC"] = "Technology Executive Committee (TEC)";
+nameDict["CTCN"] = "Climate Technology Centre and Network (CTCN)";
+nameDict["Forum II"] = "Forum on the Impact of the Implementation (Forum II)";
+nameDict["NDCs"] = "Nationally Determined Contributions (NDCs)";
 
-var svg = d3.select("body").append("svg")
+//On page load, clear button is disabled
+d3.select("#clearSearch").style("cursor", "auto")
+
+var svg = d3.select("#graphLayout").append("svg")
     .attr("width", width)
     .attr("height", height);
 
@@ -176,8 +86,8 @@ $("svg").css({top: 114, left: 179, position:'absolute'});
 //circle theme selectors
 var circle_svg = d3.select("#themes")
                    .append("svg:svg")
-                   .attr("width", 700)
-                   .attr("height", 77);
+                   .attr("width", 165)
+                   .attr("height", 87);
  
 //http://knowledgestockpile.blogspot.fr/2012/01/creating-svg-groups-using-d3js-example.html
 //MITIGATION theme
@@ -186,34 +96,41 @@ groupM = circle_svg.append("svg:g");
 circleM = groupM.append("svg:circle")
                         .attr("cx", 30)
                         .attr("cy", 30)
-                        .attr("r", 15)
-                        .attr("fill", circle_colour[1])
+                        .attr("r", 18)
+                        //.attr("fill", circle_colour[1])
+                        .attr("fill", circle_colour[0])
                         .attr("transform", function(d) { 
                           return "translate(" + 23 + "," + 0 + ")"; 
                         });
 
 circleM_text = groupM.append("svg:text")
-                             .attr("dx", 16)
+                             .attr("dx", 27)
                              .attr("dy", 65)
-                             .text("MITIGATION")
+                             .text("THEME")
                              .style("font-size","14px");
+//second line of label
+circleM_text = groupM.append("svg:text")
+                             .attr("dx", 24)
+                             .attr("dy", 80)
+                             .text("+ Article")
+                             .style("font-size","14px");                             
 
 //ADAPTATION theme
 groupA = circle_svg.append("svg:g");                 
 
 circleA = groupA.append("svg:circle")
-                        .attr("cx", 150)
+                        .attr("cx", 92)
                         .attr("cy", 30)
-                        .attr("r", 15)
-                        .attr("fill", circle_colour[2])
+                        .attr("r", 8)
+                        .attr("fill", circle_colour[1])
                         .attr("transform", function(d) { 
                           return "translate(" + 23 + "," + 0 + ")"; 
                         });
 
 circleA_text = groupA.append("svg:text")
-                             .attr("dx", 130)
+                             .attr("dx", 91)
                              .attr("dy", 65)
-                             .text("ADAPTATION")
+                             .text("Decision")
                              .style("font-size","14px");
 
 d3.json("Agreement-link.json", function(agreementLinks) {
@@ -249,6 +166,9 @@ d3.json("SourceTargetPairs.json", function(error, json) {
                 .attr("id", function (d, i) {
                   return "link-" + i;
                 })
+                .attr("class", function (d) {
+                  return d.source.linkClass;
+                })
                 .on("click", linkMouseClick)
                 .on("mouseover", linkMouseover);
 
@@ -263,14 +183,16 @@ d3.json("SourceTargetPairs.json", function(error, json) {
   var node = svg.selectAll(".node")
       .data(json.nodes)
     .enter().append("g")
-      .attr("class", "node")
+      .attr("class", function (d) {
+        return "node" + " " + d.theme;
+      })
       .attr("id", function (d, i) {
         return "node-" + i;
       })
       .call(force.drag);
 
   node.append("circle")
-      .attr("r", function (d) {        
+      .attr("r", function (d) {
         if (d.name.split("-")[0] === "MITIGATION" || d.name === "ADAPTATION") return 18;
         else if (d.name === "Article 4" || d.name === "Article 7" || d.name === "Article 2") return 10;
         else return 8;
@@ -418,6 +340,89 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     d3.selectAll(".nytg-navigation li").attr("class", "");
     d3.select(button).attr("class", "selected");
   }
+
+  // var optArray = [];
+  // for (var i = 0; i < json.nodes.length - 1; i++) {
+  //     //use long form name if available
+  //     if (nameDict[json.nodes[i].name]) {
+  //       optArray.push(nameDict[json.nodes[i].name]);
+  //     } else optArray.push(json.nodes[i].name);
+  // }
+  var optArray = [
+    "Ad Hoc Working Group", "Subsidiary Body for Implementation (SBI)",
+    "Subsidiary Body for Scientific and Technological Advice", "SBSTA",
+    "Adaptation Committee", "AC", "Least Developed Countries Expert Group", "LDCEG",
+    "Standing Committee on Finance", "SCF", "Technology Executive Committee", "TEC",
+    "Climate Technology Centre and Network", "CTCN", 
+    "Forum on the Impact of the Implementation (Forum II)",
+    "Nationally Determined Contributions", "NDCs",
+    "Secretariat", "Registry"
+
+  ]
+  
+  optArray = optArray.sort();
+  console.log("optArray: ", optArray)
+
+  $("#search").autocomplete({
+    source: optArray
+  });
+
+  $("#search").on("autocompleteclose", function() {
+    //Reduce the opacity of all but the neighbouring nodes
+    var selectedVal = $('#search').val();
+    console.log("selectedVal: ", selectedVal)
+
+    d3.select("#clearSearch")
+      .style("cursor", "pointer")
+      .classed("enabled", true);
+
+    //select specific node text: d3.select("g#node-12").text()
+     
+    if (selectedVal) {
+      //Loop through all nodes
+      var d = svg.selectAll(".node").filter(function (d, i) {
+        
+        //if search word is not in node name, reduce opacity of node and link
+        if (d.name.indexOf(getKeyByValue(nameDict, selectedVal)) === -1 &&
+                                        d.name.indexOf(selectedVal) === -1) {
+          //node opacity
+          d3.select(this).style("opacity", 0.3);
+
+          //link opacity
+          d3.selectAll("." + d.linkClass).style("opacity", 0.3);
+
+        }
+
+      });
+    }
+  });
+
+  d3.select("#clearSearch")
+    .on("click", function() {
+      if (d3.select(this).classed("enabled")) {
+        return resetLinks();
+      }
+    });
+
+  //Get reverse of nameDict dictionary
+  function getKeyByValue(hash, value) {
+    var key;
+    for (key in hash) {
+      if (hash[key] == value) return key;
+    }
+  }
+
+  //Reset opacity of nodes and links, and clear search box
+  function resetLinks() {
+    $("#search").val("");
+    d3.select("#clearSearch")
+      .style("cursor", "auto")
+      .classed("enabled", false);
+    force.resume();
+    node.style("opacity", 1);
+    link.style("opacity", 1);
+}
+
       
 }); //end SourceTargetPairs.json
 

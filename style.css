@@ -1,0 +1,147 @@
+body {
+  font-family: Helvetica, sans-serif;
+  color: #585858;
+}
+.nytg-navigation li.selected {
+    background: none repeat scroll 0 0 #e9e9e9;
+    border-color: #aaa;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2) inset;
+    color: #000;
+}
+.nytg-navigation li:first-of-type {
+    border-radius: 4px 0 0 4px;
+}
+.nytg-navigation li:last-of-type {
+    border-radius: 0 4px 4px 0;
+    border-right: 1px solid #ccc;
+}
+.nytg-navigation li {
+    background: none repeat scroll 0 0 #f9f9f9;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    color: #999;
+    cursor: pointer;
+    float: left;
+    font-size: 14px;
+    margin: 0;
+    padding: 10px 18px;
+}
+ul {
+    list-style: outside none none;
+    margin-top: 80px;
+}
+
+.nytg-sort li.selected {
+  background: none repeat scroll 0 0 #e9e9e9;
+  border-color: #aaa;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2) inset;
+  color: #555;
+}
+
+.nytg-sort li.enabled {    
+  border-color: #808080;
+  color: #595959;
+}  
+
+.nytg-sort li {
+  background: none repeat scroll 0 0 #f9f9f9;
+  border-bottom: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  color: #999;
+  cursor: pointer;
+  float: left;
+  font-size: 14px;
+  margin: 0;
+  padding: 10px 18px;
+  border-radius: 4px 4px 4px 4px;
+}
+
+#title {
+  font-size: 26px;
+  position: relative;
+  width: 700px;
+  top: 5px;
+  left: 100px;
+}
+
+#infotext {
+  position: relative;
+  width: 700px;
+  top: 22px;
+  left: 100px;
+}
+
+.precis_ref {
+  font-family: serif;
+  position: relative;
+  height: 20px;
+  width: 400px;
+  top: 64px;
+  left: 100px;
+}
+
+.precis {
+  font-family: serif;
+  position: relative;
+  height: 20px;
+  width: 400px;
+  top: 99px;
+  left: 100px;
+}
+
+#themes {  
+  position: relative;
+  width: 700px;
+  top: -7px;
+  left: 800px;
+}
+
+.link {
+  cursor: pointer;
+  stroke: #ccc;
+}
+
+.node text {
+  /*pointer-events: none;*/
+  cursor: pointer;
+  font: 10px sans-serif;
+  fill: #303030;
+}
+
+/*.node circle {
+  cursor: pointer;
+}*/
+
+.node circle:hover {
+  stroke: steelblue;
+}
+
+/*http://stackoverflow.com/questions/27238845/manipulate-mouseover-hit-areain-d3-js*/
+.path {
+  stroke: #878f8f;
+  stroke-width: 1.5px;
+  fill:none;
+}
+
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+  font-family: sans-serif;
+  font-size: 12px;
+}
+
+#search {
+  position: absolute;
+  right: 450px;
+  top: 54px;
+  z-index: 100;
+}
+
+#searchDecision {
+  position: absolute;
+  right: 200px;
+  top: 54px;
+  z-index: 100;
+}
+
