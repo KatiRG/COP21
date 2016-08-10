@@ -4,9 +4,14 @@
 <meta charset="utf-8">
 
 <body>
+<script src="bower_components/jquery/dist/jquery.min.js"></script> 
+<link rel="stylesheet" href="bower_components/jquery-ui/themes/ui-lightness/jquery-ui.min.css">
+<script src="bower_components/jquery-ui/jquery-ui.js"></script>
+
 <script src="d3.v3.min.js"></script>
 <script src="cola.v3.min.js"></script> <!--http://marvl.infotech.monash.edu/webcola/-->
-<script src="jquery-1.10.2.min.js"></script>
+<!--<script src="jquery-1.10.2.min.js"></script>-->
+
 <link href="style.css" rel="stylesheet" type="text/css">
 
 <div id="title">COP21 Paris Agreement and supporting Decisions</div>
@@ -23,6 +28,7 @@
 <div id="themes">
   <!--Themes:-->
 </div>
+<div class='ui-widget'><input id='search'></div>
 
 <div id="infotext">
   Click on a link to highlight it and display the corresponding document text.</br>
@@ -32,6 +38,7 @@
 
 <div class="precis_ref"></div>
 <div class="precis"></div>
+<div id="graphLayout"></div>
 
 <script>
 
@@ -48,23 +55,22 @@ var links_in_timeline;
 
 var nameDict = {};
 nameDict["AdHoc Work Grp"] = "Ad Hoc Working Group";
-nameDict["SBI"] = "Subsidiary Body for Implementation";
-nameDict["SBI input-Decision III.29"] = "Subsidiary Body for Implementation input";
-nameDict["SBI recommendations-Decision III.34"] = "Subsidiary Body for Implementation recommendations";
-nameDict["FII"] = "Forum on the Impact of the Implementation";
+nameDict["SBI"] = "Subsidiary Body for Implementation (SBI)";
+nameDict["SBI input-Decision III.29"] = "Subsidiary Body for Implementation (SBI) input";
+nameDict["SBI recommendations-Decision III.34"] = "Subsidiary Body for Implementation (SBI) recommendations";
 nameDict["COP-Paris1"] = "COP, Paris Agreement meeting, first session";
 nameDict["Agreement"] = "Paris Agreement";
-nameDict["SBSTA"] = "Subsidiary Body for Scientific and Technological Advice";
-nameDict["SBSTA recommendations-Decision III.34"] = "Subsidiary Body for Scientific and Technological Advice recommendations";
-nameDict["AC"] = "Adaptation Committee";
-nameDict["LDCEG"] = "Least Developed Countries Expert Group";
-nameDict["SCF"] = "Standing Committee on Finance";
-nameDict["TEC"] = "Technology Executive Committee";
-nameDict["CTCN"] = "Climate Technology Centre and Network";
-nameDict["Forum II"] = "Forum on the Impact of the Implementation";
-nameDict["NDCs"] = "Nationally Determined Contributions";
+nameDict["SBSTA"] = "Subsidiary Body for Scientific and Technological Advice (SBSTA)";
+nameDict["SBSTA recommendations-Decision III.34"] = "Subsidiary Body for Scientific and Technological Advice (SBSTA) recommendations";
+nameDict["AC"] = "Adaptation Committee (AC)";
+nameDict["LDCEG"] = "Least Developed Countries Expert Group (LDCEG)";
+nameDict["SCF"] = "Standing Committee on Finance (SCF)";
+nameDict["TEC"] = "Technology Executive Committee (TEC)";
+nameDict["CTCN"] = "Climate Technology Centre and Network (CTCN)";
+nameDict["Forum II"] = "Forum on the Impact of the Implementation (Forum II)";
+nameDict["NDCs"] = "Nationally Determined Contributions (NDCs)";
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#graphLayout").append("svg")
     .attr("width", width)
     .attr("height", height);
 
@@ -74,7 +80,7 @@ $("svg").css({top: 114, left: 179, position:'absolute'});
 var circle_svg = d3.select("#themes")
                    .append("svg:svg")
                    .attr("width", 165)
-                   .attr("height", 77);
+                   .attr("height", 87);
  
 //http://knowledgestockpile.blogspot.fr/2012/01/creating-svg-groups-using-d3js-example.html
 //MITIGATION theme
@@ -91,10 +97,16 @@ circleM = groupM.append("svg:circle")
                         });
 
 circleM_text = groupM.append("svg:text")
-                             .attr("dx", 33)
+                             .attr("dx", 27)
                              .attr("dy", 65)
-                             .text("Article")
+                             .text("THEME")
                              .style("font-size","14px");
+//second line of label
+circleM_text = groupM.append("svg:text")
+                             .attr("dx", 24)
+                             .attr("dy", 80)
+                             .text("+ Article")
+                             .style("font-size","14px");                             
 
 //ADAPTATION theme
 groupA = circle_svg.append("svg:g");                 
@@ -162,8 +174,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
       .data(json.nodes)
     .enter().append("g")
       .attr("class", function (d) {
-        console.log("node d: ", d)
-        return "node" + " " + d.theme; 
+        return "node" + " " + d.theme;
       })
       .attr("id", function (d, i) {
         return "node-" + i;
@@ -171,7 +182,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
       .call(force.drag);
 
   node.append("circle")
-      .attr("r", function (d) {        
+      .attr("r", function (d) {
         if (d.name.split("-")[0] === "MITIGATION" || d.name === "ADAPTATION") return 18;
         else if (d.name === "Article 4" || d.name === "Article 7" || d.name === "Article 2") return 10;
         else return 8;
@@ -319,6 +330,59 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     d3.selectAll(".nytg-navigation li").attr("class", "");
     d3.select(button).attr("class", "selected");
   }
+
+  // var optArray = [];
+  // for (var i = 0; i < json.nodes.length - 1; i++) {
+  //     //use long form name if available
+  //     if (nameDict[json.nodes[i].name]) {
+  //       optArray.push(nameDict[json.nodes[i].name]);
+  //     } else optArray.push(json.nodes[i].name);
+  // }
+  var optArray = [
+    "Ad Hoc Working Group", "Subsidiary Body for Implementation (SBI)",
+    "Subsidiary Body for Scientific and Technological Advice", "SBSTA",
+    "Adaptation Committee", "AC", "Least Developed Countries Expert Group", "LDCEG",
+    "Standing Committee on Finance", "SCF", "Technology Executive Committee", "TEC",
+    "Climate Technology Centre and Network", "CTCN", "Forum on the Impact of the Implementation",
+    "Forum II", "Nationally Determined Contributions", "NDCs"
+
+  ]
+  
+  optArray = optArray.sort();
+  console.log("optArray: ", optArray)
+
+  $("#search").autocomplete({
+    source: optArray
+  });
+
+  $("#search").on("autocompleteclose", function() {
+    //Reduce the opacity of all but the neighbouring nodes
+    var selectedVal = $('#search').val();
+    console.log("selectedVal: ", selectedVal)
+
+    //select specific node text: d3.select("g#node-12").text()
+     
+    if (selectedVal) {
+      //Loop through all nodes
+      var d = svg.selectAll(".node").filter(function (d, i) {
+        //if search word is not in node name, reduce opacity of node
+        if (d.name.indexOf(getKeyByValue(nameDict, selectedVal)) === -1 &&
+                                        d.name.indexOf(selectedVal) === -1) {
+          d3.select(this).style("opacity", 0.3);
+        }
+
+      });
+    }
+  });
+
+  //Get reverse of nameDict dictionary
+  function getKeyByValue(hash, value) {
+    var key;
+    for (key in hash) {
+      if (hash[key] == value) return key;
+    }
+  }
+
       
 }); //end SourceTargetPairs.json
 

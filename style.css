@@ -98,3 +98,22 @@ ul {
   stroke-width: 1.5px;
   fill:none;
 }
+
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+  font-family: sans-serif;
+  font-size: 12px;
+}
+
+#search {
+  position: absolute;
+  right: 450px;
+  top: 54px;
+  z-index: 100;
+}
+
+#searchDecision {
+  position: absolute;
+  right: 200px;
+  top: 54px;
+  z-index: 100;
+}
