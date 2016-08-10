@@ -28,7 +28,11 @@
 <div id="themes">
   <!--Themes:-->
 </div>
+
 <div class='ui-widget'><input id='search'></div>
+<ul class="nytg-sort" style='position: absolute; right: 362px; top: -32px;'>
+  <li id="clearSearch">Clear</li>          
+</ul>
 
 <div id="infotext">
   Click on a link to highlight it and display the corresponding document text.</br>
@@ -69,6 +73,9 @@ nameDict["TEC"] = "Technology Executive Committee (TEC)";
 nameDict["CTCN"] = "Climate Technology Centre and Network (CTCN)";
 nameDict["Forum II"] = "Forum on the Impact of the Implementation (Forum II)";
 nameDict["NDCs"] = "Nationally Determined Contributions (NDCs)";
+
+//On page load, clear button is disabled
+d3.select("#clearSearch").style("cursor", "auto")
 
 var svg = d3.select("#graphLayout").append("svg")
     .attr("width", width)
@@ -360,6 +367,10 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     var selectedVal = $('#search').val();
     console.log("selectedVal: ", selectedVal)
 
+    d3.select("#clearSearch")
+      .style("cursor", "pointer")
+      .classed("enabled", true);
+
     //select specific node text: d3.select("g#node-12").text()
      
     if (selectedVal) {
@@ -375,6 +386,13 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     }
   });
 
+  d3.select("#clearSearch")
+    .on("click", function() {
+      if (d3.select(this).classed("enabled")) {
+        return resetLinks();
+      }
+    });
+
   //Get reverse of nameDict dictionary
   function getKeyByValue(hash, value) {
     var key;
@@ -382,6 +400,17 @@ d3.json("SourceTargetPairs.json", function(error, json) {
       if (hash[key] == value) return key;
     }
   }
+
+  //Reset opacity of nodes and links, and clear search box
+  function resetLinks() {
+    $("#search").val("");
+    d3.select("#clearSearch")
+      .style("cursor", "auto")
+      .classed("enabled", false);
+    force.resume();
+    node.style("opacity", 1);
+    link.style("opacity", 1);
+}
 
       
 }); //end SourceTargetPairs.json
