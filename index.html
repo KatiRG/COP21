@@ -367,6 +367,10 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     source: optArray
   });
 
+  $("#search").on("autocompleteopen", function() {
+    resetLinks();
+  });
+
   $("#search").on("autocompleteclose", function() {
     //Reduce the opacity of all but the neighbouring nodes
     var selectedVal = $('#search').val();
