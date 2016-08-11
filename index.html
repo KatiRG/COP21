@@ -350,7 +350,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
   // }
   var optArray = [
     "Ad Hoc Working Group", "Subsidiary Body for Implementation (SBI)",
-    "Subsidiary Body for Scientific and Technological Advice", "SBSTA",
+    "Subsidiary Body for Scientific and Technological Advice (SBSTA)",
     "Adaptation Committee", "AC", "Least Developed Countries Expert Group", "LDCEG",
     "Standing Committee on Finance", "SCF", "Technology Executive Committee", "TEC",
     "Climate Technology Centre and Network", "CTCN", 
@@ -393,13 +393,23 @@ d3.json("SourceTargetPairs.json", function(error, json) {
           d3.select(this).style("opacity", 0.3);
 
           //link opacity
-          d3.selectAll("." + d.linkClass).style("opacity", 0.3);
+          //d3.selectAll("." + d.linkClass).style("opacity", 0.3);
 
+          
+        } //end name check
+      }); //end loop through nodes
+
+      json.links.forEach(function (d, idx) {
+        //linkedByIndex[d.source.index + "," + d.target.index] = 1;
+        console.log("forEach d: ", d.source.name)
+        if (d.source.name.indexOf(getKeyByValue(nameDict, selectedVal)) ===  -1) {            
+            d3.select("g#link-" + idx).style("opacity", 0.3)
         }
+      }); //end loop through json
 
-      });
-    }
-  });
+
+    } // end if selectedVal
+  }); //end search.on
 
   d3.select("#clearSearch")
     .on("click", function() {
