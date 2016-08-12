@@ -60,12 +60,12 @@ var links_in_timeline;
 var nameDict = {};
 nameDict["Ad Hoc Work Grp"] = "Ad Hoc Working Group";
 nameDict["SBI"] = "Subsidiary Body for Implementation (SBI)";
-nameDict["SBI input-Decision III.29"] = "Subsidiary Body for Implementation (SBI) input";
-nameDict["SBI recommendations-Decision III.34"] = "Subsidiary Body for Implementation (SBI) recommendations";
+nameDict["SBI input-Decision 29"] = "Subsidiary Body for Implementation (SBI) input";
+nameDict["SBI recommendations-Decision 34"] = "Subsidiary Body for Implementation (SBI) recommendations";
 nameDict["COP-Paris1"] = "COP, Paris Agreement meeting, first session";
 nameDict["Agreement"] = "Paris Agreement";
 nameDict["SBSTA"] = "Subsidiary Body for Scientific and Technological Advice (SBSTA)";
-nameDict["SBSTA recommendations-Decision III.34"] = "Subsidiary Body for Scientific and Technological Advice (SBSTA) recommendations";
+nameDict["SBSTA recommendations-Decision 34"] = "Subsidiary Body for Scientific and Technological Advice (SBSTA) recommendations";
 nameDict["AC"] = "Adaptation Committee (AC)";
 nameDict["LDCEG"] = "Least Developed Countries Expert Group (LDCEG)";
 nameDict["SCF"] = "Standing Committee on Finance (SCF)";
@@ -501,7 +501,7 @@ function linkMouseClick(d) {
 
     var s = this.id; 
     if (link_info[s]) {
-      var linkref = link_info[s]['section']+", para. "+link_info[s]['para'] +": ";
+      var linkref = link_info[s]['section']+" para. "+link_info[s]['para'] +": ";
       var linkref_text = link_info[s]['text'];      
     } else {
       var linkref = "Section TBA, para. TBA:";
