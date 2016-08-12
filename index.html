@@ -373,7 +373,6 @@ d3.json("SourceTargetPairs.json", function(error, json) {
 
   $("#search").on("autocompleteclose", function() {
     var selectedVal = $('#search').val();
-    console.log("selectedVal: ", selectedVal)
 
     //Make everything opaque then higlight corresponding matches
     d3.selectAll("g").style("opacity", 0.3);
@@ -381,8 +380,6 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     d3.select("#clearSearch")
       .style("cursor", "pointer")
       .classed("enabled", true);
-
-    //select specific node text: d3.select("g#node-12").text()
      
     if (selectedVal) {
       //Loop through all nodes (highlights nodes that do not have downstream links)
@@ -391,8 +388,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
         //if search word is node name, highlight node
         if (d.name.indexOf(getKeyByValue(nameDict, selectedVal)) != -1 ||
                                      d.name.indexOf(selectedVal) != -1) {
-          console.log("match: ", d.name)
-          //node opacity
+  
           d3.select(this).style("opacity", 1);
           
         } //end name check
@@ -400,23 +396,6 @@ d3.json("SourceTargetPairs.json", function(error, json) {
 
       //For nodes with downstream links
       json.links.forEach(function (d, idx) {
-        //gray out all links whose source node name does not contain search term
-        // if (d.source.name.indexOf(getKeyByValue(nameDict, selectedVal)) ===  -1 &&
-        //                              d.source.name.indexOf(selectedVal) === -1) {
-        //     d3.select("g#link-" + idx).style("opacity", 0.3);
-        //   d3.select("g#node-" + idx).style("opacity", 0.3);
-
-        // } else { //source name of link contains search term
-        //   //highlight link source node
-        //   //var node_to_highlight = d.target.index;
-        //   console.log("d.source.index: ", d.source.index)
-        //   console.log("d.target.index: ", d.target.index)
-        //   d3.select("g#node-" + d.source.index).style("opacity", 1)
-
-        //   //hightlight downstream nodes
-        //   d3.select("g#node-" + d.target.index).style("opacity", 1)
-        // }
-
 
         if (d.source.name.indexOf(getKeyByValue(nameDict, selectedVal)) !=  -1 ||
                                      d.source.name.indexOf(selectedVal) != -1) {
@@ -424,16 +403,9 @@ d3.json("SourceTargetPairs.json", function(error, json) {
           d3.select("g#node-" + d.source.index).style("opacity", 1)
           d3.select("g#node-" + d.target.index).style("opacity", 1)
           d3.select("g#link-" + idx).style("opacity", 1);
-
-          console.log("d.source.index: ", d.source.index)
-          console.log("d.target.index: ", d.target.index)
-          console.log("idx: ", idx)
         }
        
       }); //end loop through json links
-
-
-
 
     } // end if selectedVal
   }); //end search.on
