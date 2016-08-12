@@ -42,6 +42,7 @@
 
 <div class="precis_ref"></div>
 <div class="precis"></div>
+<div class="linkDoc"></div>
 <div id="graphLayout"></div>
 
 <script>
@@ -502,14 +503,17 @@ function linkMouseClick(d) {
     var s = this.id; 
     if (link_info[s]) {
       var linkref = link_info[s]['section']+" para. "+link_info[s]['para'] +": ";
-      var linkref_text = link_info[s]['text'];      
+      var linkref_text = link_info[s]['text'] + " " + "<a href=parisAgreement_12Dec2015.html>Link to agreement</a>";
     } else {
       var linkref = "Section TBA, para. TBA:";
       var linkref_text = "Text TBA";
     }
 
     d3.selectAll(".precis_ref").text(linkref);
-    d3.selectAll(".precis").text(linkref_text);
+    //d3.selectAll(".precis").text(linkref_text);
+    d3.selectAll(".precis").html(linkref_text);
+    //d3.selectAll(".linkDoc").text("link to document");
+    //<a href=foo.html#bar>Some nice link text</a>
 
   } else { //only previously selected link is clickable (ie to turn it off)
 
