@@ -14,7 +14,7 @@
     {"name":"Secretariat interm version-Decision 30","group":1, "theme": "mitigation", "linkClass": "Secretariat"},
     {"name":"SBI input-Decision 29","group":1, "theme": "mitigation", "linkClass": "SBI"},
     {"name":"Secretariat publish online-Decision 36","group":1, "theme": "mitigation", "linkClass": "Secretariat"},
-    {"name":"Ad Hoc Work Grp guidance-Decision 31","group":1, "theme": "mitigation", "linkClass": "AdHocWorkGrp"},
+    {"name":"Ad Hoc Work Grp NDC guidance-Decision 31","group":1, "theme": "mitigation", "linkClass": "AdHocWorkGrp"},
     {"name":"SBSTA recommendations-Decision 34","group":1, "theme": "mitigation", "linkClass": "SBSTA"},
     {"name":"SBI recommendations-Decision 34","group":1, "theme": "mitigation", "linkClass": "SBI"}
   ],
