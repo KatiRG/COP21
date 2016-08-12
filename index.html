@@ -356,7 +356,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     "Climate Technology Centre and Network", "CTCN", 
     "Forum on the Impact of the Implementation (Forum II)",
     "Nationally Determined Contribution", "NDC",
-    "Secretariat", "Registry"
+    "Secretariat", "Registry", "GHG"
 
   ]
   
@@ -372,34 +372,43 @@ d3.json("SourceTargetPairs.json", function(error, json) {
   });
 
   $("#search").on("autocompleteclose", function() {
-    //Reduce the opacity of all but the neighbouring nodes
     var selectedVal = $('#search').val();
-    console.log("selectedVal: ", selectedVal)
+
+    //Make everything opaque then higlight corresponding matches
+    d3.selectAll("g").style("opacity", 0.3);
 
     d3.select("#clearSearch")
       .style("cursor", "pointer")
       .classed("enabled", true);
-
-    //select specific node text: d3.select("g#node-12").text()
      
     if (selectedVal) {
-      //Loop through all nodes
+      //Loop through all nodes (highlights nodes that do not have downstream links)
       var d = svg.selectAll(".node").filter(function (d, i) {
         
-        //if search word is not in node name, reduce opacity of node and link
-        if (d.name.indexOf(getKeyByValue(nameDict, selectedVal)) === -1 &&
-                                        d.name.indexOf(selectedVal) === -1) {
-          //node opacity
-          d3.select(this).style("opacity", 0.3);
+        //if search word is node name, highlight node
+        if (d.name.indexOf(getKeyByValue(nameDict, selectedVal)) != -1 ||
+                                     d.name.indexOf(selectedVal) != -1) {
+  
+          d3.select(this).style("opacity", 1);
+          
+        } //end name check
+      }); //end loop through nodes
 
-          //link opacity
-          d3.selectAll("." + d.linkClass).style("opacity", 0.3);
+      //For nodes with downstream links
+      json.links.forEach(function (d, idx) {
 
+        if (d.source.name.indexOf(getKeyByValue(nameDict, selectedVal)) !=  -1 ||
+                                     d.source.name.indexOf(selectedVal) != -1) {
+
+          d3.select("g#node-" + d.source.index).style("opacity", 1)
+          d3.select("g#node-" + d.target.index).style("opacity", 1)
+          d3.select("g#link-" + idx).style("opacity", 1);
         }
+       
+      }); //end loop through json links
 
-      });
-    }
-  });
+    } // end if selectedVal
+  }); //end search.on
 
   d3.select("#clearSearch")
     .on("click", function() {

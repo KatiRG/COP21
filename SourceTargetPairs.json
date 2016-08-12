@@ -6,7 +6,7 @@
     {"name":"NDC Public Registry-4para12","group":0, "theme": "mitigation", "linkClass": "Registry"},
     {"name":"Account for NDCs-4para13","group":0, "theme": "mitigation", "linkClass": "NDCs"},
     {"name":"GHG emissions","group":0, "theme": "mitigation", "linkClass": "GHG"},
-    {"name":"Reduction Strategies-4para19","group":0, "theme": "mitigation", "linkClass": "Article4"},
+    {"name":"GHG reduction strategies-4para19","group":0, "theme": "mitigation", "linkClass": "Article4"},
     {"name":"Forum II","group":0, "theme": "mitigation", "linkClass": "Forum-II"},
     {"name":"Update every 5 yrs-Decision 23, 24","group":1, "theme": "mitigation", "linkClass": "Article4"},
     {"name":"Submit NDCs in advance-Decision 25","group":1, "theme": "mitigation", "linkClass": "NDCs"},
