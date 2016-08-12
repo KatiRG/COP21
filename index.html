@@ -73,6 +73,7 @@ nameDict["TEC"] = "Technology Executive Committee (TEC)";
 nameDict["CTCN"] = "Climate Technology Centre and Network (CTCN)";
 nameDict["Forum II"] = "Forum on the Impact of the Implementation (Forum II)";
 nameDict["NDC"] = "Nationally Determined Contribution (NDC)";
+nameDict["GHG"] = "Greenhouse Gas Emissions (GHG)";
 
 //On page load, clear button is disabled
 d3.select("#clearSearch").style("cursor", "auto")
@@ -167,7 +168,8 @@ d3.json("SourceTargetPairs.json", function(error, json) {
                   return "link-" + i;
                 })
                 .attr("class", function (d) {
-                  return d.source.linkClass;
+                  //return d.source.linkClass;
+                  return "linkClass";
                 })
                 .on("click", linkMouseClick)
                 .on("mouseover", linkMouseover);
@@ -356,7 +358,7 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     "Climate Technology Centre and Network", "CTCN", 
     "Forum on the Impact of the Implementation (Forum II)",
     "Nationally Determined Contribution (NDC)",
-    "Secretariat", "Registry", "GHG"
+    "Secretariat", "Registry", "Greenhouse Gas Emissions (GHG)"
 
   ]
   
@@ -375,7 +377,8 @@ d3.json("SourceTargetPairs.json", function(error, json) {
     var selectedVal = $('#search').val();
 
     //Make everything opaque then higlight corresponding matches
-    d3.selectAll("g").style("opacity", 0.3);
+    d3.selectAll(".node").style("opacity", 0.3);
+    d3.selectAll(".linkClass").style("opacity", 0.3);
 
     d3.select("#clearSearch")
       .style("cursor", "pointer")
